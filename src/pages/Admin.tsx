@@ -53,10 +53,10 @@ export default function Admin() {
     try {
       await deployWebsite();
       toast.success('Website deployed successfully!');
-      window.open('http://localhost:8080/website', '_blank');
+      window.open('https://sellsynctemplate.netlify.app/website', '_blank');
     } catch (error) {
       toast.error('Failed to deploy to server. Deployed locally as backup.');
-      window.open('http://localhost:8080/website', '_blank');
+      window.open('https://sellsynctemplate.netlify.app/website', '_blank');
     }
   };
 
