@@ -87,7 +87,7 @@ export function PropertyPanel() {
       formData.append('image', file);
 
       try {
-        const response = await fetch('http://localhost:5000/api/upload', {
+        const response = await fetch('https://sellsynctemplatebackend.onrender.com/api/upload', {
           method: 'POST',
           body: formData,
         });
@@ -391,7 +391,7 @@ export function PropertyPanel() {
                         formData.append('image', file);
 
                         try {
-                          const response = await fetch('http://localhost:5000/api/upload', {
+                          const response = await fetch('https://sellsynctemplatebackend.onrender.com/api/upload', {
                             method: 'POST',
                             body: formData,
                           });

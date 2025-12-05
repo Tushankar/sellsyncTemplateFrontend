@@ -31,7 +31,7 @@ export function SetupSection({ data, variant = 'default', isPreview, onSetupComp
     const file = e.target.files?.[0];
     if (file) {
       setFormData({ ...formData, logoFile: file });
-      
+
       // Create preview
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -51,7 +51,7 @@ export function SetupSection({ data, variant = 'default', isPreview, onSetupComp
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
       setIsUploading(true);
       let logoUrl = formData.logo;
@@ -61,7 +61,7 @@ export function SetupSection({ data, variant = 'default', isPreview, onSetupComp
         const formDataObj = new FormData();
         formDataObj.append('image', formData.logoFile);
 
-        const uploadResponse = await fetch('http://localhost:5000/api/upload', {
+        const uploadResponse = await fetch('https://sellsynctemplatebackend.onrender.com/api/upload', {
           method: 'POST',
           body: formDataObj,
         });
@@ -86,19 +86,19 @@ export function SetupSection({ data, variant = 'default', isPreview, onSetupComp
       if (sections.length > 0) {
         // Get the first navbar section ID from the config (would be better to pass this)
         // For now, we'll dispatch a custom event that the builder can listen to
-        window.dispatchEvent(new CustomEvent('websiteSetupUpdate', { 
-          detail: { 
+        window.dispatchEvent(new CustomEvent('websiteSetupUpdate', {
+          detail: {
             websiteName: setupData.websiteName,
-            logo: setupData.logo 
-          } 
+            logo: setupData.logo
+          }
         }));
       }
-      
+
       // Call callback if provided
       if (onSetupComplete) {
         onSetupComplete(setupData);
       }
-      
+
       // Close the dialog
       setIsOpen(false);
     } catch (error) {
@@ -160,7 +160,7 @@ export function SetupSection({ data, variant = 'default', isPreview, onSetupComp
               <Label className="text-base font-semibold">
                 Website Logo <span className="text-muted-foreground">(Optional)</span>
               </Label>
-              
+
               {!preview ? (
                 <div
                   onClick={() => fileInputRef.current?.click()}
