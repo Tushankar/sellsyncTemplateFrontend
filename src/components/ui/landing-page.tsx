@@ -46,6 +46,31 @@ const staggerContainer = {
   },
 }
 
+// Directional variants for client cards
+const getDirectionVariant = (direction: 'left' | 'right' | 'top' | 'bottom', isMobile: boolean) => {
+  if (isMobile) {
+    return {
+      hidden: { opacity: 0, y: 20 },
+      visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+    }
+  }
+
+  const variants = {
+    left: { hidden: { opacity: 0, x: -100 }, visible: { opacity: 1, x: 0 } },
+    right: { hidden: { opacity: 0, x: 100 }, visible: { opacity: 1, x: 0 } },
+    top: { hidden: { opacity: 0, y: -100 }, visible: { opacity: 1, y: 0 } },
+    bottom: { hidden: { opacity: 0, y: 100 }, visible: { opacity: 1, y: 0 } }
+  }
+
+  return {
+    ...variants[direction],
+    visible: {
+      ...variants[direction].visible,
+      transition: { duration: 0.8, type: "spring", stiffness: 50, damping: 20 }
+    }
+  }
+}
+
 const itemFadeIn = {
   hidden: { opacity: 0, y: 20 },
   visible: {
@@ -58,14 +83,26 @@ const itemFadeIn = {
 export function DesignAgency() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [scrollY, setScrollY] = useState(0)
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
       setScrollY(window.scrollY)
     }
 
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+
+    // Initial check
+    checkMobile()
+
     window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
+    window.addEventListener("resize", checkMobile)
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+      window.removeEventListener("resize", checkMobile)
+    }
   }, [])
 
   const toggleMenu = () => {
@@ -75,13 +112,10 @@ export function DesignAgency() {
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-br from-background via-background to-muted/20">
       {/* Header */}
-      <motion.header
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.5 }}
-        className={`sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 ${scrollY > 50 ? "shadow-md" : ""}`}
+      <header
+        className={`sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-shadow duration-300 ${scrollY > 50 ? "shadow-md" : ""}`}
       >
-        <div className="container flex h-16 items-center justify-between border-x border-muted">
+        <div className="container flex h-16 items-center justify-between md:border-x md:border-muted px-4">
           <div className="flex items-center gap-3">
             <Link to="/" className="flex items-center space-x-3">
               <img
@@ -126,7 +160,7 @@ export function DesignAgency() {
             <span className="sr-only">Toggle menu</span>
           </button>
         </div>
-      </motion.header>
+      </header>
 
       {/* Mobile Menu */}
       {isMenuOpen && (
@@ -186,15 +220,15 @@ export function DesignAgency() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="w-full py-8 md:py-12 lg:py-16 xl:py-20 overflow-hidden">
-          <div className="container px-4 md:px-6 border border-muted rounded-3xl bg-gradient-to-br from-background to-muted/30">
-            <div className="grid gap-3 lg:grid-cols-[1fr_400px] lg:gap-3 xl:grid-cols-[1fr_600px]">
+        <section className="w-full py-6 sm:py-8 md:py-12 lg:py-16 xl:py-20 overflow-hidden">
+          <div className="container px-3 sm:px-4 md:px-6 border border-muted rounded-2xl sm:rounded-3xl bg-gradient-to-br from-background to-muted/30">
+            <div className="grid gap-4 sm:gap-3 lg:grid-cols-[1fr_400px] lg:gap-3 xl:grid-cols-[1fr_600px]">
               <motion.div
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={fadeIn}
-                className="flex flex-col justify-center space-y-4 py-10"
+                className="flex flex-col justify-center space-y-4 py-6 sm:py-8 md:py-10"
               >
                 <div className="space-y-3">
                   <motion.div
@@ -210,7 +244,7 @@ export function DesignAgency() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.7, delay: 0.2 }}
-                    className="text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none"
+                    className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl xl:text-6xl/none font-bold tracking-tighter"
                   >
                     Build stunning websites without{" "}
                     <span className="bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">
@@ -221,7 +255,7 @@ export function DesignAgency() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.7, delay: 0.4 }}
-                    className="max-w-[600px] text-muted-foreground md:text-xl"
+                    className="max-w-[600px] text-sm sm:text-base text-muted-foreground md:text-xl"
                   >
                     Create professional websites in minutes with our intuitive drag-and-drop builder. Choose from stunning templates and customize everything to match your brand.
                   </motion.p>
@@ -230,21 +264,21 @@ export function DesignAgency() {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.7, delay: 0.6 }}
-                  className="flex flex-col gap-3 sm:flex-row"
+                  className="flex flex-row gap-2 sm:gap-3 items-center"
                 >
-                  <Link to="/builder">
-                    <Button size="lg" className="rounded-3xl group">
+                  <Link to="/builder" className="flex-1 sm:flex-none">
+                    <Button size="lg" className="rounded-3xl group w-full sm:min-w-[160px] justify-center text-sm sm:text-base px-3 sm:px-4">
                       Get Started
                       <motion.span
                         initial={{ x: 0 }}
                         whileHover={{ x: 5 }}
                         transition={{ type: "spring", stiffness: 400, damping: 10 }}
                       >
-                        <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                        <ArrowRight className="ml-1 sm:ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                       </motion.span>
                     </Button>
                   </Link>
-                  <Button variant="outline" size="lg" className="rounded-3xl">
+                  <Button variant="outline" size="lg" className="rounded-3xl flex-1 sm:flex-none sm:min-w-[160px] justify-center text-sm sm:text-base px-3 sm:px-4">
                     <span className="hidden sm:inline">View Our Work</span>
                     <span className="sm:hidden">Our Work</span>
                   </Button>
@@ -269,13 +303,13 @@ export function DesignAgency() {
         </section>
 
         {/* Client Logos */}
-        <section id="clients" className="w-full py-4 md:py-6 lg:py-8">
+        <section id="clients" className="w-full py-4 sm:py-4 md:py-6 lg:py-8">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeIn}
-            className="container px-4 md:px-6 border border-muted rounded-3xl bg-muted/20"
+            className="container px-3 sm:px-4 md:px-6 border border-muted rounded-2xl sm:rounded-3xl bg-muted/20"
           >
             <div className="flex flex-col items-center justify-center space-y-4 text-center py-10">
               <div className="space-y-3">
@@ -291,7 +325,7 @@ export function DesignAgency() {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.2 }}
-                  className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl"
+                  className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tighter"
                 >
                   Our Clients
                 </motion.h2>
@@ -299,7 +333,7 @@ export function DesignAgency() {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.3 }}
-                  className="mx-auto max-w-[700px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed"
+                  className="mx-auto max-w-[700px] text-sm sm:text-base text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed"
                 >
                   We've helped thousands of businesses build their online presence
                 </motion.p>
@@ -309,28 +343,28 @@ export function DesignAgency() {
               variants={staggerContainer}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true }}
-              className="mx-auto grid grid-cols-2 items-center gap-3 py-8 md:grid-cols-3 lg:grid-cols-6"
+              viewport={{ once: false, margin: "-100px" }}
+              className="mx-auto grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 py-4 sm:py-6 md:py-8 md:grid-cols-3 lg:grid-cols-6"
             >
               {[
-                { name: "Google", url: "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png" },
-                { name: "Microsoft", url: "https://img-prod-cms-rt-microsoft-com.akamaized.net/cms/api/am/imageFileData/RE1Mu3b?ver=5c31" },
-                { name: "Amazon", url: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" },
-                { name: "Netflix", url: "https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" },
-                { name: "Spotify", url: "https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg" },
-                { name: "Stripe", url: "https://upload.wikimedia.org/wikipedia/commons/b/ba/Stripe_Logo%2C_revised_2016.svg" },
+                { name: "Google", url: "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png", direction: 'left' },
+                { name: "Microsoft", url: "https://img-prod-cms-rt-microsoft-com.akamaized.net/cms/api/am/imageFileData/RE1Mu3b?ver=5c31", direction: 'top' },
+                { name: "Amazon", url: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg", direction: 'bottom' },
+                { name: "Netflix", url: "https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg", direction: 'top' },
+                { name: "Spotify", url: "https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg", direction: 'bottom' },
+                { name: "Stripe", url: "https://upload.wikimedia.org/wikipedia/commons/b/ba/Stripe_Logo%2C_revised_2016.svg", direction: 'right' },
               ].map((client, i) => (
                 <motion.div
                   key={i}
-                  variants={itemFadeIn}
+                  variants={getDirectionVariant(client.direction as 'left' | 'right' | 'top' | 'bottom', isMobile)}
                   whileHover={{ scale: 1.05 }}
-                  className="flex items-center justify-center"
+                  className="flex items-center justify-center w-full"
                 >
-                  <div className="rounded-3xl p-8 bg-background/80 transition-all w-full min-h-[180px] flex items-center justify-center">
+                  <div className="rounded-2xl sm:rounded-3xl p-3 sm:p-4 md:p-8 bg-background/80 transition-all w-full min-h-[80px] xs:min-h-[100px] sm:min-h-[120px] md:min-h-[180px] flex items-center justify-center">
                     <img
                       src={client.url}
                       alt={`${client.name} Logo`}
-                      className="h-16 w-auto max-w-[160px] transition-all object-contain"
+                      className="h-8 xs:h-10 sm:h-12 md:h-16 w-auto max-w-[80px] xs:max-w-[100px] sm:max-w-[120px] md:max-w-[160px] transition-all object-contain"
                       onError={(e) => {
                         // Fallback to company name if logo fails
                         const target = e.target as HTMLImageElement;
@@ -353,13 +387,13 @@ export function DesignAgency() {
 
 
         {/* Services Section */}
-        <section id="services" className="w-full py-8 md:py-12 lg:py-16">
+        <section id="services" className="w-full py-6 sm:py-8 md:py-12 lg:py-16">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeIn}
-            className="container px-4 md:px-6 border border-muted rounded-3xl"
+            className="container px-3 sm:px-4 md:px-6 border border-muted rounded-2xl sm:rounded-3xl"
           >
             <div className="flex flex-col items-center justify-center space-y-4 text-center py-10">
               <div className="space-y-3">
@@ -375,7 +409,7 @@ export function DesignAgency() {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.2 }}
-                  className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl"
+                  className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tighter"
                 >
                   Powerful Features
                 </motion.h2>
@@ -383,7 +417,7 @@ export function DesignAgency() {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.3 }}
-                  className="mx-auto max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed"
+                  className="mx-auto max-w-[900px] text-sm sm:text-base text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed"
                 >
                   Everything you need to build and launch your website
                 </motion.p>
@@ -394,7 +428,7 @@ export function DesignAgency() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="mx-auto grid max-w-5xl items-center gap-3 py-12 md:grid-cols-2 lg:grid-cols-3"
+              className="mx-auto grid max-w-5xl items-center gap-3 sm:gap-4 py-6 sm:py-8 md:py-12 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
             >
               {[
                 {
@@ -436,7 +470,7 @@ export function DesignAgency() {
                   key={index}
                   variants={itemFadeIn}
                   whileHover={{ y: -10, transition: { duration: 0.3 } }}
-                  className="group relative overflow-hidden rounded-3xl border p-6 shadow-sm transition-all hover:shadow-md bg-background/80"
+                  className="group relative overflow-hidden rounded-2xl sm:rounded-3xl border p-4 sm:p-6 shadow-sm transition-all hover:shadow-md bg-background/80"
                 >
                   <div className="absolute -right-20 -top-20 h-40 w-40 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-all duration-300"></div>
                   <div className="relative space-y-3">
@@ -459,13 +493,13 @@ export function DesignAgency() {
         </section>
 
         {/* Portfolio/Work Bento Grid */}
-        <section id="work" className="w-full py-8 md:py-12 lg:py-16">
+        <section id="work" className="w-full py-6 sm:py-8 md:py-12 lg:py-16">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeIn}
-            className="container px-4 md:px-6 border border-muted rounded-3xl bg-muted/10"
+            className="container px-3 sm:px-4 md:px-6 border border-muted rounded-2xl sm:rounded-3xl bg-muted/10"
           >
             <div className="flex flex-col items-center justify-center space-y-4 text-center py-10">
               <div className="space-y-3">
@@ -481,7 +515,7 @@ export function DesignAgency() {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.2 }}
-                  className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl"
+                  className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tighter"
                 >
                   Our Work
                 </motion.h2>
@@ -489,7 +523,7 @@ export function DesignAgency() {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.3 }}
-                  className="mx-auto max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed"
+                  className="mx-auto max-w-[900px] text-sm sm:text-base text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed"
                 >
                   A showcase of websites built with SellSync
                 </motion.p>
@@ -500,14 +534,14 @@ export function DesignAgency() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="mx-auto grid max-w-7xl gap-3 py-12 md:grid-cols-4 md:grid-rows-2 lg:gap-3"
+              className="mx-auto grid max-w-7xl gap-2 sm:gap-3 py-6 sm:py-8 md:py-12 grid-cols-1 sm:grid-cols-2 md:grid-cols-4 md:grid-rows-2 lg:gap-3"
             >
               {/* Bento Grid Items */}
               <motion.div
                 variants={itemFadeIn}
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.3 }}
-                className="group relative overflow-hidden rounded-3xl md:col-span-2 md:row-span-2 h-[400px] md:h-auto"
+                className="group relative overflow-hidden rounded-2xl sm:rounded-3xl sm:col-span-2 md:col-span-2 md:row-span-2 h-[250px] sm:h-[300px] md:h-auto"
               >
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity group-hover:opacity-100"></div>
                 <img
@@ -515,9 +549,9 @@ export function DesignAgency() {
                   alt="Portfolio Item 1"
                   className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 flex flex-col justify-end p-6 text-white opacity-0 transition-opacity group-hover:opacity-100">
-                  <h3 className="text-xl font-bold">E-commerce Store</h3>
-                  <p className="text-sm">Complete online store built in hours, not weeks</p>
+                <div className="absolute inset-0 flex flex-col justify-end p-4 sm:p-6 text-white opacity-0 transition-opacity group-hover:opacity-100">
+                  <h3 className="text-base sm:text-xl font-bold">E-commerce Store</h3>
+                  <p className="text-xs sm:text-sm">Complete online store built in hours, not weeks</p>
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -538,7 +572,7 @@ export function DesignAgency() {
                 variants={itemFadeIn}
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.3 }}
-                className="group relative overflow-hidden rounded-3xl h-[200px]"
+                className="group relative overflow-hidden rounded-2xl sm:rounded-3xl h-[150px] sm:h-[180px] md:h-[200px]"
               >
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity group-hover:opacity-100"></div>
                 <img
@@ -546,16 +580,16 @@ export function DesignAgency() {
                   alt="Portfolio Item 2"
                   className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 flex flex-col justify-end p-6 text-white opacity-0 transition-opacity group-hover:opacity-100">
-                  <h3 className="text-xl font-bold">Portfolio Website</h3>
-                  <p className="text-sm">Stunning portfolio created with our templates</p>
+                <div className="absolute inset-0 flex flex-col justify-end p-3 sm:p-6 text-white opacity-0 transition-opacity group-hover:opacity-100">
+                  <h3 className="text-base sm:text-xl font-bold">Portfolio Website</h3>
+                  <p className="text-xs sm:text-sm">Stunning portfolio created with our templates</p>
                 </div>
               </motion.div>
               <motion.div
                 variants={itemFadeIn}
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.3 }}
-                className="group relative overflow-hidden rounded-3xl h-[200px]"
+                className="group relative overflow-hidden rounded-2xl sm:rounded-3xl h-[150px] sm:h-[180px] md:h-[200px]"
               >
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity group-hover:opacity-100"></div>
                 <img
@@ -563,16 +597,16 @@ export function DesignAgency() {
                   alt="Portfolio Item 3"
                   className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 flex flex-col justify-end p-6 text-white opacity-0 transition-opacity group-hover:opacity-100">
-                  <h3 className="text-xl font-bold">Business Landing</h3>
-                  <p className="text-sm">Professional landing page in minutes</p>
+                <div className="absolute inset-0 flex flex-col justify-end p-3 sm:p-6 text-white opacity-0 transition-opacity group-hover:opacity-100">
+                  <h3 className="text-base sm:text-xl font-bold">Business Landing</h3>
+                  <p className="text-xs sm:text-sm">Professional landing page in minutes</p>
                 </div>
               </motion.div>
               <motion.div
                 variants={itemFadeIn}
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.3 }}
-                className="group relative overflow-hidden rounded-3xl h-[200px]"
+                className="group relative overflow-hidden rounded-2xl sm:rounded-3xl h-[150px] sm:h-[180px] md:h-[200px]"
               >
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity group-hover:opacity-100"></div>
                 <img
@@ -580,16 +614,16 @@ export function DesignAgency() {
                   alt="Portfolio Item 4"
                   className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 flex flex-col justify-end p-6 text-white opacity-0 transition-opacity group-hover:opacity-100">
-                  <h3 className="text-xl font-bold">Restaurant Site</h3>
-                  <p className="text-sm">Beautiful restaurant website with menu integration</p>
+                <div className="absolute inset-0 flex flex-col justify-end p-3 sm:p-6 text-white opacity-0 transition-opacity group-hover:opacity-100">
+                  <h3 className="text-base sm:text-xl font-bold">Restaurant Site</h3>
+                  <p className="text-xs sm:text-sm">Beautiful restaurant website with menu integration</p>
                 </div>
               </motion.div>
               <motion.div
                 variants={itemFadeIn}
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.3 }}
-                className="group relative overflow-hidden rounded-3xl md:col-span-2 h-[200px]"
+                className="group relative overflow-hidden rounded-2xl sm:rounded-3xl sm:col-span-2 md:col-span-2 h-[150px] sm:h-[180px] md:h-[200px]"
               >
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity group-hover:opacity-100"></div>
                 <img
@@ -597,13 +631,13 @@ export function DesignAgency() {
                   alt="Portfolio Item 5"
                   className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 flex flex-col justify-end p-6 text-white opacity-0 transition-opacity group-hover:opacity-100">
-                  <h3 className="text-xl font-bold">Agency Website</h3>
-                  <p className="text-sm">Full-featured agency site with contact forms</p>
+                <div className="absolute inset-0 flex flex-col justify-end p-3 sm:p-6 text-white opacity-0 transition-opacity group-hover:opacity-100">
+                  <h3 className="text-base sm:text-xl font-bold">Agency Website</h3>
+                  <p className="text-xs sm:text-sm">Full-featured agency site with contact forms</p>
                 </div>
               </motion.div>
             </motion.div>
-            <div className="flex justify-center pb-10">
+            <div className="flex justify-center pb-6 sm:pb-8 md:pb-10">
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Link to="/builder"><Button size="lg" className="rounded-3xl group">View All Projects<motion.span initial={{ x: 0 }} whileHover={{ x: 5 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}><ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" /></motion.span></Button></Link>
               </motion.div>
@@ -612,28 +646,28 @@ export function DesignAgency() {
         </section>
 
         {/* About/Team Section */}
-        <section id="about" className="w-full py-8 md:py-12 lg:py-16">
+        <section id="about" className="w-full py-6 sm:py-8 md:py-12 lg:py-16">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeIn}
-            className="container px-4 md:px-6 border border-muted rounded-3xl"
+            className="container px-3 sm:px-4 md:px-6 border border-muted rounded-2xl sm:rounded-3xl"
           >
             <div className="grid gap-3 lg:grid-cols-2 lg:gap-3">
               <motion.div
                 initial={{ opacity: 0, x: -50 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6 }}
-                className="space-y-4 p-6"
+                className="space-y-4 p-4 sm:p-6"
               >
                 <div className="inline-block rounded-3xl bg-muted px-3 py-1 text-sm">About Us</div>
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Our Mission</h2>
-                <p className="text-muted-foreground md:text-xl/relaxed">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tighter">Our Mission</h2>
+                <p className="text-sm sm:text-base text-muted-foreground md:text-xl/relaxed">
                   SellSync was created to democratize web design. We believe everyone should be able to create a
                   professional website without needing to code or hire expensive developers.
                 </p>
-                <p className="text-muted-foreground md:text-xl/relaxed">
+                <p className="text-sm sm:text-base text-muted-foreground md:text-xl/relaxed">
                   Our platform combines powerful features with an intuitive interface, making website creation
                   accessible to businesses of all sizes. From startups to enterprises, we help you build your online presence.
                 </p>
@@ -648,7 +682,7 @@ export function DesignAgency() {
                 transition={{ duration: 0.6 }}
                 className="flex items-center justify-center"
               >
-                <div className="relative h-[350px] w-full md:h-[450px] lg:h-[500px] overflow-hidden rounded-3xl">
+                <div className="relative h-[250px] sm:h-[300px] md:h-[350px] w-full md:h-[450px] lg:h-[500px] overflow-hidden rounded-2xl sm:rounded-3xl">
                   <img
                     src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1920&h=1080&fit=crop"
                     alt="Team Photo"
@@ -661,13 +695,13 @@ export function DesignAgency() {
         </section>
 
         {/* Testimonials */}
-        <section className="w-full py-8 md:py-12 lg:py-16">
+        <section className="w-full py-6 sm:py-8 md:py-12 lg:py-16">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeIn}
-            className="container px-4 md:px-6 border border-muted rounded-3xl bg-muted/20"
+            className="container px-3 sm:px-4 md:px-6 border border-muted rounded-2xl sm:rounded-3xl bg-muted/20"
           >
             <div className="flex flex-col items-center justify-center space-y-4 text-center py-10">
               <div className="space-y-3">
@@ -683,7 +717,7 @@ export function DesignAgency() {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.2 }}
-                  className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl"
+                  className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tighter"
                 >
                   What Our Clients Say
                 </motion.h2>
@@ -691,7 +725,7 @@ export function DesignAgency() {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.3 }}
-                  className="mx-auto max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed"
+                  className="mx-auto max-w-[900px] text-sm sm:text-base text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed"
                 >
                   Don't just take our word for it - hear from some of our satisfied clients
                 </motion.p>
@@ -702,7 +736,7 @@ export function DesignAgency() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="mx-auto grid max-w-5xl gap-3 py-12 lg:grid-cols-2"
+              className="mx-auto grid max-w-5xl gap-3 sm:gap-4 py-6 sm:py-8 md:py-12 grid-cols-1 lg:grid-cols-2"
             >
               {[
                 {
@@ -738,7 +772,7 @@ export function DesignAgency() {
                   key={index}
                   variants={itemFadeIn}
                   whileHover={{ y: -10 }}
-                  className="flex flex-col justify-between rounded-3xl border bg-background p-6 shadow-sm"
+                  className="flex flex-col justify-between rounded-2xl sm:rounded-3xl border bg-background p-4 sm:p-6 shadow-sm"
                 >
                   <div>
                     <div className="flex gap-0.5 text-yellow-500">
@@ -756,7 +790,7 @@ export function DesignAgency() {
                         </svg>
                       ))}
                     </div>
-                    <blockquote className="mt-4 text-lg font-medium leading-relaxed">"{testimonial.quote}"</blockquote>
+                    <blockquote className="mt-3 sm:mt-4 text-base sm:text-lg font-medium leading-relaxed">"{testimonial.quote}"</blockquote>
                   </div>
                   <div className="mt-6 flex items-center">
                     <img
@@ -776,23 +810,23 @@ export function DesignAgency() {
         </section>
 
         {/* Contact Section */}
-        <section id="contact" className="w-full py-8 md:py-12 lg:py-16">
+        <section id="contact" className="w-full py-6 sm:py-8 md:py-12 lg:py-16">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeIn}
-            className="container grid items-center gap-3 px-4 md:px-6 lg:grid-cols-2 border border-muted rounded-3xl"
+            className="container grid items-center gap-4 sm:gap-3 px-3 sm:px-4 md:px-6 grid-cols-1 lg:grid-cols-2 border border-muted rounded-2xl sm:rounded-3xl"
           >
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
-              className="space-y-3 p-6"
+              className="space-y-3 p-4 sm:p-6"
             >
               <div className="inline-block rounded-3xl bg-muted px-3 py-1 text-sm">Contact</div>
-              <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight">Let's Work Together</h2>
-              <p className="max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl/tight font-bold tracking-tighter">Let's Work Together</h2>
+              <p className="max-w-[600px] text-sm sm:text-base text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
                 Ready to start your next project? Get in touch with us to discuss how we can help bring your vision to
                 life.
               </p>
@@ -848,7 +882,7 @@ export function DesignAgency() {
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
-              className="rounded-3xl border bg-background p-6 shadow-sm"
+              className="rounded-2xl sm:rounded-3xl border bg-background p-4 sm:p-6 shadow-sm"
             >
               <h3 className="text-xl font-bold">Send Us a Message</h3>
               <p className="text-sm text-muted-foreground">
@@ -911,7 +945,7 @@ export function DesignAgency() {
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeIn}
-          className="container grid gap-3 px-4 py-10 md:px-6 lg:grid-cols-4 border-x border-muted"
+          className="container grid gap-6 sm:gap-3 px-3 sm:px-4 py-8 sm:py-10 md:px-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 md:border-x md:border-muted"
         >
           <div className="space-y-3">
             <Link to="/" className="flex items-center space-x-3">
@@ -1017,16 +1051,16 @@ export function DesignAgency() {
             <p className="text-sm text-muted-foreground">
               Stay updated with our latest projects, design tips, and company news.
             </p>
-            <form className="flex space-x-3">
-              <Input type="email" placeholder="Enter your email" className="max-w-lg flex-1 rounded-3xl" />
-              <Button type="submit" className="rounded-3xl">
+            <form className="flex flex-col sm:flex-row gap-2 sm:gap-0 sm:space-x-3">
+              <Input type="email" placeholder="Enter your email" className="max-w-lg flex-1 rounded-2xl sm:rounded-3xl" />
+              <Button type="submit" className="rounded-2xl sm:rounded-3xl w-full sm:w-auto">
                 Subscribe
               </Button>
             </form>
           </div>
         </motion.div>
         <div className="border-t">
-          <div className="container flex flex-col items-center justify-between gap-3 py-6 md:h-16 md:flex-row md:py-0">
+          <div className="container flex flex-col items-center justify-between gap-2 sm:gap-3 py-4 sm:py-6 md:h-16 md:flex-row md:py-0 px-3 sm:px-4">
             <p className="text-xs text-muted-foreground">
               &copy; {new Date().getFullYear()} SellSync. All rights reserved.
             </p>
