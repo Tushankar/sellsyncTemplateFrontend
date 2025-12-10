@@ -68,6 +68,71 @@ export function PropertyPanel() {
     updateField('buttons', buttons);
   };
 
+  const updateStat = (index: number, field: string, value: any) => {
+    const stats = [...(section.data.stats || [])];
+    stats[index] = { ...stats[index], [field]: value };
+    updateField('stats', stats);
+  };
+
+  const addStat = () => {
+    const stats = [...(section.data.stats || [])];
+    stats.push({
+      value: '100+',
+      label: 'New Stat',
+    });
+    updateField('stats', stats);
+  };
+
+  const removeStat = (index: number) => {
+    const stats = [...(section.data.stats || [])];
+    stats.splice(index, 1);
+    updateField('stats', stats);
+  };
+
+  const updateTimelineItem = (index: number, field: string, value: any) => {
+    const timeline = [...(section.data.timeline || [])];
+    timeline[index] = { ...timeline[index], [field]: value };
+    updateField('timeline', timeline);
+  };
+
+  const addTimelineItem = () => {
+    const timeline = [...(section.data.timeline || [])];
+    timeline.push({
+      year: '2024',
+      title: 'New Milestone',
+      description: 'Description of this milestone',
+    });
+    updateField('timeline', timeline);
+  };
+
+  const removeTimelineItem = (index: number) => {
+    const timeline = [...(section.data.timeline || [])];
+    timeline.splice(index, 1);
+    updateField('timeline', timeline);
+  };
+
+  const updateCategory = (index: number, field: string, value: any) => {
+    const categories = [...(section.data.categories || [])];
+    categories[index] = { ...categories[index], [field]: value };
+    updateField('categories', categories);
+  };
+
+  const addCategory = () => {
+    const categories = [...(section.data.categories || [])];
+    categories.push({
+      id: Date.now().toString(),
+      name: 'New Category',
+      count: 0,
+    });
+    updateField('categories', categories);
+  };
+
+  const removeCategory = (index: number) => {
+    const categories = [...(section.data.categories || [])];
+    categories.splice(index, 1);
+    updateField('categories', categories);
+  };
+
   const updateItem = (index: number, field: string, value: any) => {
     if (section.type === 'navbar') {
       const links = [...(section.data.links || [])];
@@ -151,6 +216,7 @@ export function PropertyPanel() {
           id: Date.now().toString(),
           image: { src: '', alt: 'Gallery Image' },
           title: 'New Image',
+          category: 'General',
         });
       } else if (section.type === 'team') {
         items.push({
@@ -196,7 +262,17 @@ export function PropertyPanel() {
           name: 'Customer Name',
           role: 'Job Title',
           company: 'Company Name',
+          rating: 5,
           image: { src: '', alt: 'Customer' },
+        });
+      } else if (section.type === 'services') {
+        items.push({
+          id: Date.now().toString(),
+          icon: 'Briefcase',
+          title: 'New Service',
+          description: 'Service description goes here...',
+          link: '#',
+          step: (items.length + 1).toString().padStart(2, '0'),
         });
       }
       updateField('items', items);
@@ -605,15 +681,188 @@ export function PropertyPanel() {
             </>
           )}
 
-          {/* Items Section */}
-          {((section.type === 'team' || section.type === 'gallery' || section.type === 'features' || section.type === 'services' || section.type === 'pricing' || section.type === 'blog' || section.type === 'products' || section.type === 'faq') && section.data.items !== undefined) || (section.type === 'navbar' && section.data.links !== undefined) || (section.type === 'footer' && section.data.columns !== undefined) ? (
+          {/* About Stats Section */}
+          {section.type === 'about' && section.data.stats !== undefined && (
             <>
               <Separator />
               <div className="space-y-3 sm:space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-muted-foreground">
                     <Type className="h-4 w-4 flex-shrink-0" />
-                    <span className="truncate">{section.type === 'navbar' ? 'Links' : section.type === 'team' ? 'Members' : section.type === 'gallery' ? 'Images' : section.type === 'features' ? 'Features' : section.type === 'services' ? 'Services' : section.type === 'pricing' ? 'Plans' : section.type === 'blog' ? 'Posts' : section.type === 'products' ? 'Products' : section.type === 'faq' ? 'Questions' : section.type === 'footer' ? 'Columns' : 'Items'}</span>
+                    <span>Stats</span>
+                  </div>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={addStat}
+                    className="h-7 sm:h-8 text-xs gap-1 flex-shrink-0"
+                  >
+                    <Plus className="h-3 w-3" />
+                    <span className="hidden sm:inline">Add Stat</span>
+                  </Button>
+                </div>
+                <div className="space-y-2 sm:space-y-3">
+                  {section.data.stats.map((stat: any, idx: number) => (
+                    <div key={idx} className="p-3 border rounded-lg sm:rounded-xl space-y-2 sm:space-y-3 bg-background/30 hover:bg-background/50 transition-colors">
+                      <div className="flex justify-between items-center">
+                        <Badge variant="outline" className="text-xs">
+                          Stat {idx + 1}
+                        </Badge>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="h-6 w-6 p-0 hover:bg-destructive/10 hover:text-destructive"
+                          onClick={() => removeStat(idx)}
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </div>
+                      <Input
+                        placeholder="Value (e.g., 500+)"
+                        value={stat.value || ''}
+                        onChange={(e) => updateStat(idx, 'value', e.target.value)}
+                        className="bg-background/50 focus:bg-background transition-colors text-sm h-9"
+                      />
+                      <Input
+                        placeholder="Label (e.g., Projects Completed)"
+                        value={stat.label || ''}
+                        onChange={(e) => updateStat(idx, 'label', e.target.value)}
+                        className="bg-background/50 focus:bg-background transition-colors text-sm h-9"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* About Timeline Section */}
+          {section.type === 'about' && section.data.timeline !== undefined && (
+            <>
+              <Separator />
+              <div className="space-y-3 sm:space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-muted-foreground">
+                    <Type className="h-4 w-4 flex-shrink-0" />
+                    <span>Timeline</span>
+                  </div>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={addTimelineItem}
+                    className="h-7 sm:h-8 text-xs gap-1 flex-shrink-0"
+                  >
+                    <Plus className="h-3 w-3" />
+                    <span className="hidden sm:inline">Add Item</span>
+                  </Button>
+                </div>
+                <div className="space-y-2 sm:space-y-3">
+                  {section.data.timeline.map((item: any, idx: number) => (
+                    <div key={idx} className="p-3 border rounded-lg sm:rounded-xl space-y-2 sm:space-y-3 bg-background/30 hover:bg-background/50 transition-colors">
+                      <div className="flex justify-between items-center">
+                        <Badge variant="outline" className="text-xs">
+                          Timeline {idx + 1}
+                        </Badge>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="h-6 w-6 p-0 hover:bg-destructive/10 hover:text-destructive"
+                          onClick={() => removeTimelineItem(idx)}
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </div>
+                      <Input
+                        placeholder="Year (e.g., 2020)"
+                        value={item.year || ''}
+                        onChange={(e) => updateTimelineItem(idx, 'year', e.target.value)}
+                        className="bg-background/50 focus:bg-background transition-colors text-sm h-9"
+                      />
+                      <Input
+                        placeholder="Title (e.g., Company Founded)"
+                        value={item.title || ''}
+                        onChange={(e) => updateTimelineItem(idx, 'title', e.target.value)}
+                        className="bg-background/50 focus:bg-background transition-colors text-sm h-9"
+                      />
+                      <Textarea
+                        placeholder="Description"
+                        value={item.description || ''}
+                        onChange={(e) => updateTimelineItem(idx, 'description', e.target.value)}
+                        rows={3}
+                        className="bg-background/50 focus:bg-background transition-colors resize-none text-sm"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* Blog Categories Section */}
+          {section.type === 'blog' && section.data.categories !== undefined && (
+            <>
+              <Separator />
+              <div className="space-y-3 sm:space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-muted-foreground">
+                    <Type className="h-4 w-4 flex-shrink-0" />
+                    <span>Categories</span>
+                  </div>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={addCategory}
+                    className="h-7 sm:h-8 text-xs gap-1 flex-shrink-0"
+                  >
+                    <Plus className="h-3 w-3" />
+                    <span className="hidden sm:inline">Add Category</span>
+                  </Button>
+                </div>
+                <div className="space-y-2 sm:space-y-3">
+                  {section.data.categories.map((category: any, idx: number) => (
+                    <div key={category.id || idx} className="p-3 border rounded-lg sm:rounded-xl space-y-2 sm:space-y-3 bg-background/30 hover:bg-background/50 transition-colors">
+                      <div className="flex justify-between items-center">
+                        <Badge variant="outline" className="text-xs">
+                          Category {idx + 1}
+                        </Badge>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="h-6 w-6 p-0 hover:bg-destructive/10 hover:text-destructive"
+                          onClick={() => removeCategory(idx)}
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </div>
+                      <Input
+                        placeholder="Category Name (e.g., Technology)"
+                        value={category.name || ''}
+                        onChange={(e) => updateCategory(idx, 'name', e.target.value)}
+                        className="bg-background/50 focus:bg-background transition-colors text-sm h-9"
+                      />
+                      <Input
+                        placeholder="Count (e.g., 12)"
+                        type="number"
+                        value={category.count || 0}
+                        onChange={(e) => updateCategory(idx, 'count', parseInt(e.target.value) || 0)}
+                        className="bg-background/50 focus:bg-background transition-colors text-sm h-9"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* Items Section */}
+          {((section.type === 'team' || section.type === 'gallery' || section.type === 'features' || section.type === 'services' || section.type === 'pricing' || section.type === 'blog' || section.type === 'products' || section.type === 'faq' || section.type === 'testimonials') && section.data.items !== undefined) || (section.type === 'navbar' && section.data.links !== undefined) || (section.type === 'footer' && section.data.columns !== undefined) ? (
+            <>
+              <Separator />
+              <div className="space-y-3 sm:space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-muted-foreground">
+                    <Type className="h-4 w-4 flex-shrink-0" />
+                    <span className="truncate">{section.type === 'navbar' ? 'Links' : section.type === 'team' ? 'Members' : section.type === 'gallery' ? 'Images' : section.type === 'features' ? 'Features' : section.type === 'services' ? 'Services' : section.type === 'pricing' ? 'Plans' : section.type === 'blog' ? 'Posts' : section.type === 'products' ? 'Products' : section.type === 'faq' ? 'Questions' : section.type === 'testimonials' ? 'Testimonials' : section.type === 'footer' ? 'Columns' : 'Items'}</span>
                   </div>
                   <Button
                     size="sm"
@@ -630,7 +879,7 @@ export function PropertyPanel() {
                     <div key={item.id || idx} className="p-3 border rounded-lg sm:rounded-xl space-y-2 sm:space-y-3 bg-background/30 hover:bg-background/50 transition-colors">
                       <div className="flex justify-between items-center">
                         <Badge variant="outline" className="text-xs">
-                          {section.type === 'team' ? 'M' : section.type === 'gallery' ? 'I' : section.type === 'features' ? 'F' : section.type === 'services' ? 'S' : section.type === 'pricing' ? 'P' : section.type === 'navbar' ? 'L' : section.type === 'blog' ? 'B' : section.type === 'products' ? 'P' : section.type === 'faq' ? 'Q' : section.type === 'footer' ? 'C' : 'I'} {idx + 1}
+                          {section.type === 'team' ? 'M' : section.type === 'gallery' ? 'I' : section.type === 'features' ? 'F' : section.type === 'services' ? 'S' : section.type === 'pricing' ? 'P' : section.type === 'navbar' ? 'L' : section.type === 'blog' ? 'B' : section.type === 'products' ? 'P' : section.type === 'faq' ? 'Q' : section.type === 'testimonials' ? 'T' : section.type === 'footer' ? 'C' : 'I'} {idx + 1}
                         </Badge>
                         <Button
                           size="sm"
@@ -664,12 +913,20 @@ export function PropertyPanel() {
                       )}
 
                       {section.type === 'gallery' && (
-                        <Input
-                          placeholder="Title"
-                          value={item.title || ''}
-                          onChange={(e) => updateItem(idx, 'title', e.target.value)}
-                          className="bg-background/50 focus:bg-background transition-colors text-sm h-9"
-                        />
+                        <>
+                          <Input
+                            placeholder="Title"
+                            value={item.title || ''}
+                            onChange={(e) => updateItem(idx, 'title', e.target.value)}
+                            className="bg-background/50 focus:bg-background transition-colors text-sm h-9"
+                          />
+                          <Input
+                            placeholder="Category (for categories variant)"
+                            value={item.category || ''}
+                            onChange={(e) => updateItem(idx, 'category', e.target.value)}
+                            className="bg-background/50 focus:bg-background transition-colors text-sm h-9"
+                          />
+                        </>
                       )}
 
                       {(section.type === 'features' || section.type === 'services') && (
@@ -697,12 +954,20 @@ export function PropertyPanel() {
                           />
 
                           {section.type === 'services' && (
-                            <Input
-                              placeholder="Link URL"
-                              value={item.link || ''}
-                              onChange={(e) => updateItem(idx, 'link', e.target.value)}
-                              className="bg-background/50 focus:bg-background transition-colors text-sm h-9"
-                            />
+                            <>
+                              <Input
+                                placeholder="Link URL"
+                                value={item.link || ''}
+                                onChange={(e) => updateItem(idx, 'link', e.target.value)}
+                                className="bg-background/50 focus:bg-background transition-colors text-sm h-9"
+                              />
+                              <Input
+                                placeholder="Step Number (for process variant)"
+                                value={item.step || ''}
+                                onChange={(e) => updateItem(idx, 'step', e.target.value)}
+                                className="bg-background/50 focus:bg-background transition-colors text-sm h-9"
+                              />
+                            </>
                           )}
                         </>
                       )}
@@ -881,6 +1146,30 @@ export function PropertyPanel() {
                             placeholder="Company Name (optional)"
                             value={item.company || ''}
                             onChange={(e) => updateItem(idx, 'company', e.target.value)}
+                            className="bg-background/50 focus:bg-background transition-colors text-sm h-9"
+                          />
+
+                          <Input
+                            placeholder="Rating (1-5, optional)"
+                            type="number"
+                            min="1"
+                            max="5"
+                            value={item.rating || ''}
+                            onChange={(e) => updateItem(idx, 'rating', parseInt(e.target.value) || 5)}
+                            className="bg-background/50 focus:bg-background transition-colors text-sm h-9"
+                          />
+
+                          <Input
+                            placeholder="Video URL (for video testimonials)"
+                            value={item.videoUrl || ''}
+                            onChange={(e) => updateItem(idx, 'videoUrl', e.target.value)}
+                            className="bg-background/50 focus:bg-background transition-colors text-sm h-9"
+                          />
+
+                          <Input
+                            placeholder="Video Thumbnail URL (optional)"
+                            value={item.thumbnail?.src || ''}
+                            onChange={(e) => updateItem(idx, 'thumbnail', { src: e.target.value, alt: item.name || 'Video thumbnail' })}
                             className="bg-background/50 focus:bg-background transition-colors text-sm h-9"
                           />
                         </>

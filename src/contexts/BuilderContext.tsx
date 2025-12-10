@@ -322,7 +322,7 @@ export function BuilderProvider({ children }: { children: React.ReactNode }) {
               services: 5,
               gallery: 6,
               blog: 7,
-              testimonials: 8,
+              testimonials: 6,
               team: 9,
               pricing: 10,
               faq: 11,

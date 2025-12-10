@@ -92,16 +92,16 @@ export default function Admin() {
   return (
     <div className="h-screen flex flex-col bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 overflow-hidden">
       {/* Header */}
-      <header className="h-14 border-b bg-white flex items-center justify-between px-4 md:px-6 shadow-sm sticky top-0 z-[50]">
-        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+      <header className="h-12 sm:h-14 border-b bg-white flex items-center justify-between px-2 sm:px-4 md:px-6 shadow-sm sticky top-0 z-[50]">
+        <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3 min-w-0">
           <img
             src="https://sellsync.netlify.app/assets/FullLogo2-BHrAzKAZ.png"
             alt="SellSync"
-            className="h-8 sm:h-10 flex-shrink-0"
+            className="h-7 sm:h-8 md:h-10 flex-shrink-0"
           />
           <div className="hidden sm:block min-w-0">
-            <h1 className="text-base font-semibold text-foreground">SellSync</h1>
-            <p className="text-xs text-muted-foreground">Website Builder</p>
+            <h1 className="text-sm md:text-base font-semibold text-foreground truncate">SellSync</h1>
+            <p className="text-xs text-muted-foreground truncate">Website Builder</p>
           </div>
         </div>
 
@@ -150,20 +150,20 @@ export default function Admin() {
         </div>
 
         {/* Header Actions */}
-        <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+        <div className="flex items-center gap-1 sm:gap-1.5 md:gap-2 flex-shrink-0">
           {/* Mobile Menu - Templates */}
           <Drawer open={showSidebar} onOpenChange={setShowSidebar}>
             <DrawerTrigger asChild>
               <Button
                 size="sm"
                 variant={showSidebar ? "default" : "outline"}
-                className={`md:hidden gap-1 transition-all px-2 sm:px-3 h-8 sm:h-9 text-xs sm:text-sm ${showSidebar
+                className={`md:hidden gap-1 transition-all px-2 sm:px-3 h-8 text-xs ${showSidebar
                   ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
                   : 'border-slate-200 hover:border-blue-300 hover:bg-blue-50'
                   }`}
               >
-                <Menu className="h-4 w-4 flex-shrink-0" />
-                <span>Templates</span>
+                <Menu className="h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0" />
+                <span className="hidden xs:inline">Templates</span>
               </Button>
             </DrawerTrigger>
             <DrawerContent className="h-[85vh] p-0 border-t">
@@ -179,13 +179,13 @@ export default function Admin() {
               <Button
                 size="sm"
                 variant={showProperties ? "default" : "outline"}
-                className={`lg:hidden gap-1 transition-all px-2 sm:px-3 h-8 sm:h-9 text-xs sm:text-sm ${showProperties
+                className={`lg:hidden gap-1 transition-all px-2 sm:px-3 h-8 text-xs ${showProperties
                   ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg'
                   : 'border-slate-200 hover:border-purple-300 hover:bg-purple-50'
                   }`}
               >
-                <Settings className="h-4 w-4 flex-shrink-0" />
-                <span>Properties</span>
+                <Settings className="h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0" />
+                <span className="hidden xs:inline">Properties</span>
               </Button>
             </DrawerTrigger>
             <DrawerContent className="h-[85vh] p-0 border-t">
@@ -199,29 +199,27 @@ export default function Admin() {
             variant="outline"
             size="sm"
             onClick={handlePreview}
-            className="gap-1.5 h-9 hover:bg-primary hover:text-primary-foreground hover:border-primary"
+            className="gap-1 h-8 px-2 sm:px-3 hover:bg-primary hover:text-primary-foreground hover:border-primary"
           >
-            <Eye className="h-4 w-4 flex-shrink-0" />
-            <span className="hidden sm:inline">Preview</span>
+            <Eye className="h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0" />
+            <span className="hidden sm:inline text-xs">Preview</span>
           </Button>
           <Button
             onClick={handleSave}
             size="sm"
-            className="gap-1.5 h-9"
+            className="gap-1 h-8 px-2 sm:px-3 text-xs"
           >
-            <Save className="h-4 w-4 flex-shrink-0" />
+            <Save className="h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0" />
             <span className="hidden sm:inline">Save</span>
-            <span className="hidden md:inline ml-1">Website</span>
-
           </Button>
           <Button
             onClick={handleDeploy}
             disabled={hasUnsavedChanges || sections.length === 0}
             size="sm"
-            className="gap-1.5 h-9 bg-green-600 hover:bg-green-700 text-white"
+            className="gap-1 h-8 px-2 sm:px-3 bg-green-600 hover:bg-green-700 text-white text-xs"
             title={getDeployButtonTitle()}
           >
-            <ExternalLink className="h-4 w-4 flex-shrink-0" />
+            <ExternalLink className="h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0" />
             <span className="hidden sm:inline">Publish</span>
           </Button>
         </div>

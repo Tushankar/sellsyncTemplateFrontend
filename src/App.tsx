@@ -7,6 +7,7 @@ import { BuilderProvider } from "@/contexts/BuilderContext";
 import Admin from "./pages/Admin";
 import Index from "./pages/Index";
 import UserDashboard from "./pages/UserDashboard";
+import FAQ from "./pages/FAQ";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
             <Route path="/admin" element={<Admin />} />
             <Route path="/dashboard" element={<UserDashboard />} />
             <Route path="/website" element={<UserDashboard />} />
+            <Route path="/faq" element={<FAQ />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
