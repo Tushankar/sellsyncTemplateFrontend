@@ -46,6 +46,7 @@ import { Gallery4 } from "@/components/ui/gallery4"
 import { FeaturesSectionWithHoverEffects } from "@/components/ui/feature-section-with-hover-effects"
 import { LoginSidebar } from "@/components/ui/login-sidebar"
 import { AuroraBackground } from "@/components/ui/aurora-background"
+import FeaturedProductSection from "@/components/ui/featured-product-section"
 
 // Animation variants
 const fadeIn = {
@@ -119,11 +120,11 @@ export function SellSyncPOS() {
                 alt="SellSync Logo"
                 className="h-10 sm:h-12 md:h-16 w-auto"
               />
-            
+
             </a>
           </div>
           <nav className="hidden md:flex items-center gap-6 lg:gap-8 pointer-events-auto flex-1 justify-center">
-            {["Features", "Hardware", "Pricing", "Industries", "Demo"].map((item) => (
+            {["Products", "Hardware", "Pricing", "Industries", "Demo"].map((item) => (
               <a
                 key={item}
                 href={`#${item.toLowerCase()}`}
@@ -181,7 +182,7 @@ export function SellSyncPOS() {
             animate="visible"
             className="container grid gap-3 pb-8 pt-6 px-3 sm:px-4"
           >
-            {["Features", "Hardware", "Pricing", "Industries", "Demo"].map((item, index) => (
+            {["Products", "Hardware", "Pricing", "Industries", "Demo"].map((item, index) => (
               <motion.div key={index} variants={itemFadeIn}>
                 <a
                   href={`#${item.toLowerCase()}`}
@@ -232,19 +233,6 @@ export function SellSyncPOS() {
               >
                 <div className="space-y-3 sm:space-y-4 mt-0 md:-mt-8 w-full max-w-full">
                   <motion.div
-                    initial={{ opacity: 0, y: -20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="flex flex-col items-start gap-1.5 sm:gap-2"
-                  >
-                    <div className="flex items-center space-x-1 sm:space-x-1.5">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="h-4 w-4 sm:h-5 sm:w-5 fill-white" />
-                      ))}
-                    </div>
-                    <span className="text-xs sm:text-sm text-white/90 font-medium">4.9 stars • 2,500+ retail stores</span>
-                  </motion.div>
-                  <motion.div
                     initial={{ opacity: 0, scale: 0.8 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.5 }}
@@ -261,7 +249,7 @@ export function SellSyncPOS() {
                   >
                     SellSync – The Smarter POS System for{" "}
                     <span className="text-white underline decoration-white/30 underline-offset-4 sm:underline-offset-8">
-                      Modern<br />Retail Stores
+                      Modern Retail Stores
                     </span>
                   </motion.h1>
                   <motion.p
@@ -307,12 +295,12 @@ export function SellSyncPOS() {
                       </motion.span>
                     </Button>
                   </Link>
-                  <Link to="/builder" className="w-full sm:flex-1 sm:max-w-[200px] pointer-events-auto">
+                  <a href="#features" className="w-full sm:flex-1 sm:max-w-[200px] pointer-events-auto">
                     <Button variant="outline" size="lg" className="rounded-3xl w-full justify-center text-xs sm:text-base px-4 sm:px-6 md:px-8 py-4 sm:py-6 md:py-7 border-white text-white hover:bg-white/10 hover:text-white bg-transparent">
                       <span className="hidden sm:inline">Explore Features</span>
                       <span className="sm:hidden">Features</span>
                     </Button>
-                  </Link>
+                  </a>
                 </motion.div>
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -329,85 +317,92 @@ export function SellSyncPOS() {
 
         <AboutUsSection />
 
+        {/* Featured Hardware Products */}
+        <section id="products">
+          <FeaturedProductSection />
+        </section>
+
         {/* Features Section */}
-        <Gallery4
+        <section id="features">
+          <Gallery4
             title="Powerful Features for Modern Retail"
             description="Discover the comprehensive features that make SellSync the ultimate POS solution for retail businesses of all sizes."
             items={[
-            {
-              id: "fast-checkout",
-              title: "Fast & Easy Checkout",
-              description:
-                "Lightning-fast billing with barcode scanning, item search, and customizable hotkeys.",
-              href: "#",
-              image:
-                "https://images.unsplash.com/photo-1726661025462-b0ddd7a363a8?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8RmFzdCUyMCUyNiUyMEVhc3klMjBDaGVja291dHxlbnwwfHwwfHx8MA%3D%3D",
-            },
-            {
-              id: "inventory-sync",
-              title: "Real-Time Inventory Sync",
-              description:
-                "Track stock across all locations with auto-adjustments and low-stock alerts.",
-              href: "#",
-              image:
-                "https://images.unsplash.com/photo-1556740714-a8395b3bf30f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDF8MHxzZWFyY2h8OHx8SW52ZW50b3J5fGVufDB8fDB8fHww",
-            },
-            {
-              id: "hardware-integration",
-              title: "Complete Hardware Integration",
-              description:
-                "Works flawlessly with SellSync's POS terminal, barcode scanners, receipt printers, and cash drawers.",
-              href: "#",
-              image:
-                "https://images.unsplash.com/photo-1748932123709-7a340870408c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Q29tcGxldGUlMjBIYXJkd2FyZSUyMEludGVncmF0aW9ufGVufDB8fDB8fHww",
-            },
-            {
-              id: "cloud-secure",
-              title: "Cloud-Based & Secure",
-              description:
-                "Your data is backed up automatically and accessible from any device.",
-              href: "#",
-              image:
-                "https://images.unsplash.com/photo-1667372283496-893f0b1e7c16?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2xvdWQlMjBzZWN1cml0eXxlbnwwfHwwfHx8MA%3D%3D",
-            },
-            {
-              id: "customer-loyalty",
-              title: "Customer & Loyalty Management",
-              description:
-                "Built-in CRM, purchase history, loyalty points, and promotions.",
-              href: "#",
-              image:
-                "https://media.istockphoto.com/id/1050280678/photo/close-up-two-businessman-hand-shake-together-for-agreement-successful-on-blur-group-of.webp?a=1&b=1&s=612x612&w=0&k=20&c=MnSxvI8YzWv-Zdki3sV2o_fLuZp6I5ybHSjaILWJwv4=",
-            },
-            {
-              id: "multi-store",
-              title: "Multi-Store Management",
-              description:
-                "Centralized control panel for pricing, stock transfer, staff roles, and reports across multiple outlets.",
-              href: "#",
-              image:
-                "https://images.unsplash.com/photo-1688561809321-e51e8a4d6651?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8U3RvcmUlMjBNYW5hZ2VtZW50fGVufDB8fDB8fHww",
-            },
-            {
-              id: "reporting-analytics",
-              title: "Advanced Reporting & Analytics",
-              description:
-                "Sales trends, top-selling products, staff performance, profits, taxes, and more—updated in real time.",
-              href: "#",
-              image:
-                "https://plus.unsplash.com/premium_photo-1681487769650-a0c3fbaed85a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8Z3JhcGhzfGVufDB8fDB8fHww",
-            },
-            {
-              id: "staff-permissions",
-              title: "Staff Permissions & Access Control",
-              description:
-                "Assign roles, prevent unauthorized actions, and track staff activities.",
-              href: "#",
-              image:
-                "https://plus.unsplash.com/premium_photo-1682145887988-7a3712b88510?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8U3RhZmYlMjBQZXJtaXNzaW9ucyUyMCUyNiUyMEFjY2VzcyUyMENvbnRyb2x8ZW58MHx8MHx8fDA%3D",
-            },
-          ]}
-        />
+              {
+                id: "fast-checkout",
+                title: "Fast & Easy Checkout",
+                description:
+                  "Lightning-fast billing with barcode scanning, item search, and customizable hotkeys.",
+                href: "#",
+                image:
+                  "https://images.unsplash.com/photo-1726661025462-b0ddd7a363a8?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8RmFzdCUyMCUyNiUyMEVhc3klMjBDaGVja291dHxlbnwwfHwwfHx8MA%3D%3D",
+              },
+              {
+                id: "inventory-sync",
+                title: "Real-Time Inventory Sync",
+                description:
+                  "Track stock across all locations with auto-adjustments and low-stock alerts.",
+                href: "#",
+                image:
+                  "https://images.unsplash.com/photo-1556740714-a8395b3bf30f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDF8MHxzZWFyY2h8OHx8SW52ZW50b3J5fGVufDB8fDB8fHww",
+              },
+              {
+                id: "hardware-integration",
+                title: "Complete Hardware Integration",
+                description:
+                  "Works flawlessly with SellSync's POS terminal, barcode scanners, receipt printers, and cash drawers.",
+                href: "#",
+                image:
+                  "https://images.unsplash.com/photo-1748932123709-7a340870408c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Q29tcGxldGUlMjBIYXJkd2FyZSUyMEludGVncmF0aW9ufGVufDB8fDB8fHww",
+              },
+              {
+                id: "cloud-secure",
+                title: "Cloud-Based & Secure",
+                description:
+                  "Your data is backed up automatically and accessible from any device.",
+                href: "#",
+                image:
+                  "https://images.unsplash.com/photo-1667372283496-893f0b1e7c16?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2xvdWQlMjBzZWN1cml0eXxlbnwwfHwwfHx8MA%3D%3D",
+              },
+              {
+                id: "customer-loyalty",
+                title: "Customer & Loyalty Management",
+                description:
+                  "Built-in CRM, purchase history, loyalty points, and promotions.",
+                href: "#",
+                image:
+                  "https://media.istockphoto.com/id/1050280678/photo/close-up-two-businessman-hand-shake-together-for-agreement-successful-on-blur-group-of.webp?a=1&b=1&s=612x612&w=0&k=20&c=MnSxvI8YzWv-Zdki3sV2o_fLuZp6I5ybHSjaILWJwv4=",
+              },
+              {
+                id: "multi-store",
+                title: "Multi-Store Management",
+                description:
+                  "Centralized control panel for pricing, stock transfer, staff roles, and reports across multiple outlets.",
+                href: "#",
+                image:
+                  "https://images.unsplash.com/photo-1688561809321-e51e8a4d6651?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8U3RvcmUlMjBNYW5hZ2VtZW50fGVufDB8fDB8fHww",
+              },
+              {
+                id: "reporting-analytics",
+                title: "Advanced Reporting & Analytics",
+                description:
+                  "Sales trends, top-selling products, staff performance, profits, taxes, and more—updated in real time.",
+                href: "#",
+                image:
+                  "https://plus.unsplash.com/premium_photo-1681487769650-a0c3fbaed85a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8Z3JhcGhzfGVufDB8fDB8fHww",
+              },
+              {
+                id: "staff-permissions",
+                title: "Staff Permissions & Access Control",
+                description:
+                  "Assign roles, prevent unauthorized actions, and track staff activities.",
+                href: "#",
+                image:
+                  "https://plus.unsplash.com/premium_photo-1682145887988-7a3712b88510?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8U3RhZmYlMjBQZXJtaXNzaW9ucyUyMCUyNiUyMEFjY2VzcyUyMENvbnRyb2x8ZW58MHx8MHx8fDA%3D",
+              },
+            ]}
+          />
+        </section>
 
         {/* Hardware Section */}
         <section id="hardware" className="w-full py-4 sm:py-6 md:py-8 lg:py-12">
@@ -447,10 +442,19 @@ export function SellSyncPOS() {
               </div>
             </div>
             <motion.div
-              variants={staggerContainer}
+              variants={{
+                hidden: { opacity: 0 },
+                visible: {
+                  opacity: 1,
+                  transition: {
+                    staggerChildren: 0.15,
+                    delayChildren: 0.1,
+                  },
+                },
+              }}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true }}
+              viewport={{ once: false, margin: "-50px" }}
               className="mx-auto w-full gap-6 md:gap-6 py-6 sm:py-8 md:py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
             >
               {[
@@ -487,7 +491,40 @@ export function SellSyncPOS() {
               ].map((item, index) => (
                 <motion.div
                   key={index}
-                  variants={itemFadeIn}
+                  custom={{ index, isMobile }}
+                  variants={{
+                    hidden: ({ index, isMobile }: { index: number; isMobile: boolean }) => {
+                      if (isMobile) return { opacity: 0, y: 20 };
+
+                      const remainder = index % 4;
+                      switch (remainder) {
+                        case 0:
+                          return { opacity: 0, x: -100, y: 0 }; // Left
+                        case 1:
+                          return { opacity: 0, x: 100, y: 0 }; // Right
+                        case 2:
+                          return { opacity: 0, y: 100, x: 0 }; // Bottom
+                        case 3:
+                          return { opacity: 0, y: -100, x: 0 }; // Top
+                        default:
+                          return { opacity: 0, y: 20 };
+                      }
+                    },
+                    visible: {
+                      opacity: 1,
+                      x: 0,
+                      y: 0,
+                      transition: {
+                        type: "tween",
+                        ease: [0.25, 0.1, 0.25, 1.0],
+                        duration: 1.0,
+                        opacity: {
+                          duration: 0.8,
+                          ease: "easeOut",
+                        },
+                      },
+                    },
+                  }}
                   whileHover={{ y: -10, transition: { duration: 0.3 } }}
                   className="relative bg-transparent rounded-3xl overflow-hidden border border-gray-200 dark:border-gray-800 h-full min-h-[350px] flex flex-col"
                 >
@@ -501,7 +538,7 @@ export function SellSyncPOS() {
                       />
                     )}
                   </div>
-                  
+
                   {/* Text Section */}
                   <div className="h-1/2 relative bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-900 dark:via-gray-900 dark:to-blue-800 hover:from-blue-100 hover:via-blue-50 hover:to-blue-200 dark:hover:from-blue-800 dark:hover:via-blue-700 dark:hover:to-blue-600 flex flex-col justify-center p-6 shadow-[0_0_20px_rgba(59,130,246,0.5),0_0_40px_rgba(59,130,246,0.3),0_0_60px_rgba(59,130,246,0.1)] hover:shadow-[0_0_30px_rgba(59,130,246,0.8),0_0_60px_rgba(59,130,246,0.5),0_0_90px_rgba(59,130,246,0.3)] transition-all duration-300">
                     <div className="space-y-3">
@@ -530,8 +567,10 @@ export function SellSyncPOS() {
           </motion.div>
         </section>
 
+
+
         {/* Retail Store Products Section */}
-        <section id="products" className="w-full py-0">
+        <section id="retail-store" className="w-full py-0">
           <RetailStoreDemo />
         </section>
 
@@ -631,7 +670,7 @@ export function SellSyncPOS() {
               >
                 Discover how SellSync can transform your retail operations. Our expert team will walk you through the platform and show you how to streamline billing, inventory management, and grow your revenue.
               </motion.p>
-              
+
               {/* Benefits Grid */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -689,69 +728,69 @@ export function SellSyncPOS() {
             >
               {/* Form Background Glow */}
               <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-2xl sm:rounded-3xl blur-xl"></div>
-              
+
               <div className="relative rounded-2xl sm:rounded-3xl border border-gray-200 bg-white p-6 sm:p-8 shadow-lg hover:shadow-2xl transition-shadow duration-300">
                 <h3 className="text-2xl sm:text-2xl font-bold mb-2 text-gray-900">Book Your Free Demo</h3>
                 <p className="text-sm text-gray-600 mb-6">Takes just 15 minutes. Our team will be in touch within 2 hours.</p>
-                
+
                 <form className="space-y-4 sm:space-y-5">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <motion.div 
+                    <motion.div
                       className="space-y-2"
                       whileHover={{ y: -2 }}
                       transition={{ duration: 0.2 }}
                     >
                       <label htmlFor="full-name" className="text-sm font-semibold text-gray-700">Full Name</label>
-                      <Input 
-                        id="full-name" 
-                        placeholder="John Doe" 
-                        className="rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm" 
+                      <Input
+                        id="full-name"
+                        placeholder="John Doe"
+                        className="rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm"
                       />
                     </motion.div>
-                    <motion.div 
+                    <motion.div
                       className="space-y-2"
                       whileHover={{ y: -2 }}
                       transition={{ duration: 0.2 }}
                     >
                       <label htmlFor="store-name" className="text-sm font-semibold text-gray-700">Store Name</label>
-                      <Input 
-                        id="store-name" 
-                        placeholder="Your Store Name" 
-                        className="rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm" 
+                      <Input
+                        id="store-name"
+                        placeholder="Your Store Name"
+                        className="rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm"
                       />
                     </motion.div>
                   </div>
 
-                  <motion.div 
+                  <motion.div
                     className="space-y-2"
                     whileHover={{ y: -2 }}
                     transition={{ duration: 0.2 }}
                   >
                     <label htmlFor="email" className="text-sm font-semibold text-gray-700">Business Email</label>
-                    <Input 
-                      id="email" 
-                      type="email" 
-                      placeholder="you@company.com" 
-                      className="rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm" 
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="you@company.com"
+                      className="rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm"
                     />
                   </motion.div>
 
-                  <motion.div 
+                  <motion.div
                     className="space-y-2"
                     whileHover={{ y: -2 }}
                     transition={{ duration: 0.2 }}
                   >
                     <label htmlFor="phone" className="text-sm font-semibold text-gray-700">Phone Number</label>
-                    <Input 
-                      id="phone" 
-                      type="tel" 
-                      placeholder="+1 (555) 000-0000" 
-                      className="rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm" 
+                    <Input
+                      id="phone"
+                      type="tel"
+                      placeholder="+1 (555) 000-0000"
+                      className="rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm"
                     />
                   </motion.div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <motion.div 
+                    <motion.div
                       className="space-y-2"
                       whileHover={{ y: -2 }}
                       transition={{ duration: 0.2 }}
@@ -776,29 +815,29 @@ export function SellSyncPOS() {
                       </Select>
                     </motion.div>
 
-                    <motion.div 
+                    <motion.div
                       className="space-y-2"
                       whileHover={{ y: -2 }}
                       transition={{ duration: 0.2 }}
                     >
                       <label htmlFor="locations" className="text-sm font-semibold text-gray-700">Number of Locations</label>
-                      <Input 
-                        id="locations" 
-                        type="number" 
+                      <Input
+                        id="locations"
+                        type="number"
                         min="1"
-                        placeholder="e.g., 1" 
-                        className="rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm" 
+                        placeholder="e.g., 1"
+                        className="rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm"
                       />
                     </motion.div>
                   </div>
 
-                  <motion.div 
-                    whileHover={{ scale: 1.02 }} 
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     className="pt-2"
                   >
-                    <Button 
-                      type="submit" 
+                    <Button
+                      type="submit"
                       className="w-full rounded-3xl bg-gradient-to-r from-[#D87027] to-[#D87027] hover:from-[#D87027]/90 hover:to-[#D87027]/90 text-white font-bold py-3 text-base lg:text-xl shadow-lg shadow-[#D87027]/30 border border-[#D87027]/20 transition-all duration-300"
                     >
                       Schedule My Demo

@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Upload, X } from 'lucide-react';
 import { useState, useRef } from 'react';
 import { useBuilder } from '@/contexts/BuilderContext';
+import { API_ENDPOINTS } from '@/lib/api';
 
 interface SetupSectionProps {
   data: SectionData['data'];
@@ -61,7 +62,7 @@ export function SetupSection({ data, variant = 'default', isPreview, onSetupComp
         const formDataObj = new FormData();
         formDataObj.append('image', formData.logoFile);
 
-        const uploadResponse = await fetch('https://sellsynctemplatebackend.onrender.com/api/upload', {
+        const uploadResponse = await fetch(API_ENDPOINTS.upload, {
           method: 'POST',
           body: formDataObj,
         });

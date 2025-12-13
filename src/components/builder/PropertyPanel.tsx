@@ -1,5 +1,6 @@
 import { useBuilder } from '@/contexts/BuilderContext';
 import { templateSections } from '@/lib/templates';
+import { API_ENDPOINTS, getImageUrl } from '@/lib/api';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
@@ -152,7 +153,7 @@ export function PropertyPanel() {
       formData.append('image', file);
 
       try {
-        const response = await fetch('https://sellsynctemplatebackend.onrender.com/api/upload', {
+        const response = await fetch(API_ENDPOINTS.upload, {
           method: 'POST',
           body: formData,
         });
@@ -467,7 +468,7 @@ export function PropertyPanel() {
                         formData.append('image', file);
 
                         try {
-                          const response = await fetch('https://sellsynctemplatebackend.onrender.com/api/upload', {
+                          const response = await fetch(API_ENDPOINTS.upload, {
                             method: 'POST',
                             body: formData,
                           });

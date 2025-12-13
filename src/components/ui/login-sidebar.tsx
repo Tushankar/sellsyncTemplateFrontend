@@ -1,15 +1,19 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { toast } from "sonner";
 import * as SheetPrimitive from "@radix-ui/react-dialog";
-import { 
-  X, 
-  Mail, 
-  Lock, 
+import {
+  X,
+  Mail,
+  Lock,
   User,
-  Eye, 
-  EyeOff, 
-  Loader2, 
+  Eye,
+  EyeOff,
+  Loader2,
   ArrowRight,
   ArrowLeft,
   KeyRound,
@@ -22,6 +26,14 @@ import {
   SheetPortal,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
+
+// Create axios instance
+const axiosInstance = axios.create({
+  baseURL: "https://pos-api-node.onrender.com",
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
 interface LoginSidebarProps {
   variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
@@ -36,6 +48,8 @@ export const LoginSidebar: React.FC<LoginSidebarProps> = ({ variant = "ghost", c
   const [view, setView] = useState<ViewState>("login");
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [loginType, setLoginType] = useState<"pos" | "builder">("pos");
+  const navigate = useNavigate();
 
   // Form Data States
   const [email, setEmail] = useState("");
@@ -44,10 +58,16 @@ export const LoginSidebar: React.FC<LoginSidebarProps> = ({ variant = "ghost", c
   const [otp, setOtp] = useState("");
   const [newPassword, setNewPassword] = useState(""); // For forgot password flow
 
+  // Login details object for API
+  const [loginDetails, setLoginDetails] = useState({
+    identifier: "",
+    password: "",
+  });
+
   // Visibility Toggles
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
-  
+
   // Validation Errors
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
@@ -82,13 +102,13 @@ export const LoginSidebar: React.FC<LoginSidebarProps> = ({ variant = "ghost", c
     // Only reset form data if we are completely switching contexts (e.g. login -> signup)
     // Don't reset if moving from signup -> signup-otp
     if (
-      (view === "signup" && newView === "signup-otp") || 
+      (view === "signup" && newView === "signup-otp") ||
       (view === "forgot" && newView === "forgot-otp")
     ) {
-        setOtp(""); // Just clear OTP input
-        setTimer(30);
+      setOtp(""); // Just clear OTP input
+      setTimer(30);
     } else {
-        resetForm();
+      resetForm();
     }
     setView(newView);
   };
@@ -96,84 +116,164 @@ export const LoginSidebar: React.FC<LoginSidebarProps> = ({ variant = "ghost", c
   const validateEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
   const validatePassword = (value: string) => value.length >= 8;
 
+  // Handle input changes
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = e.target;
+    if (name === "email") {
+      setEmail(value);
+      setLoginDetails((prev) => ({ ...prev, identifier: value }));
+    } else if (name === "password") {
+      setPassword(value);
+      setLoginDetails((prev) => ({ ...prev, password: value }));
+    }
+  };
+
+  // Login handler
+  const loginHandler = async () => {
+    setIsLoading(true);
+    try {
+      const loginPayload = {
+        email: loginDetails.identifier,
+        password: loginDetails.password,
+      };
+
+      // Call login API
+      const reqLogin = await axiosInstance.post(
+        "/api/v1/auth/login",
+        loginPayload
+      );
+
+      if (reqLogin.status === 200 && reqLogin.data) {
+        toast.success("Login Success");
+
+        // Store all cookies
+        const userType = reqLogin.data.user_type;
+        console.log("Login Response:", reqLogin.data);
+        console.log("User Type:", userType);
+
+        Cookies.set("authToken", reqLogin.data.token, {
+          expires: 1,
+          path: "/",
+        });
+        Cookies.set("u_id", reqLogin.data.user_id, {
+          expires: 1,
+          path: "/",
+        });
+        Cookies.set("u_type", userType, {
+          expires: 1,
+          path: "/",
+        });
+
+        // Verify cookie was set
+        const savedUserType = Cookies.get("u_type");
+        console.log("Saved u_type cookie:", savedUserType);
+
+        // Route to appropriate dashboard based on loginType
+        setIsLoading(false);
+        setIsOpen(false);
+
+        // Add a small delay to ensure cookies are set before navigation
+        setTimeout(() => {
+          if (loginType === "builder") {
+            console.log("Routing to /builder");
+            navigate("/builder");
+          } else {
+            console.log("Routing to POS system");
+            window.location.href = "https://sellsync.netlify.app/";
+          }
+        }, 100);
+      }
+    } catch (error: any) {
+      console.log(error.response);
+      toast.error(
+        error?.response?.data?.error?.password ||
+        error?.response?.data?.error?.email ||
+        error?.response?.data?.message ||
+        "Login failed!"
+      );
+      setIsLoading(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     let valid = true;
-    
+
     // Clear previous errors
     setEmailError("");
     setPasswordError("");
     setOtpError("");
 
     // --- Validation Logic based on View ---
-    
+
     // 1. Initial Login/Signup/Forgot validation
     if (["login", "signup", "forgot"].includes(view)) {
-        if (!validateEmail(email)) {
-            setEmailError("Please enter a valid email address.");
-            valid = false;
-        }
+      if (!validateEmail(email)) {
+        setEmailError("Please enter a valid email address.");
+        valid = false;
+      }
     }
 
     // 2. Password validation for Login/Signup
     if (["login", "signup"].includes(view)) {
-        if (!validatePassword(password)) {
-            setPasswordError("Password must be at least 8 characters.");
-            valid = false;
-        }
+      if (!validatePassword(password)) {
+        setPasswordError("Password must be at least 8 characters.");
+        valid = false;
+      }
     }
 
     // 3. Name validation for Signup
     if (view === "signup" && name.trim().length < 2) {
-        valid = false; // Add specific name error if needed
+      valid = false; // Add specific name error if needed
     }
 
     // 4. OTP Validation
     if (["signup-otp", "forgot-otp"].includes(view)) {
-        if (otp.length !== 6) {
-            setOtpError("Please enter a valid 6-digit code.");
-            valid = false;
-        }
+      if (otp.length !== 6) {
+        setOtpError("Please enter a valid 6-digit code.");
+        valid = false;
+      }
     }
 
     // 5. New Password Validation (Forgot Flow)
     if (view === "forgot-otp") {
-        if (!validatePassword(newPassword)) {
-            setPasswordError("New password must be at least 8 characters.");
-            valid = false;
-        }
+      if (!validatePassword(newPassword)) {
+        setPasswordError("New password must be at least 8 characters.");
+        valid = false;
+      }
     }
 
     if (valid) {
-      setIsLoading(true);
-      
-      // Simulate API Network Request
-      setTimeout(() => {
-        setIsLoading(false);
-        
-        if (view === "signup") {
+      // For login view, call the actual login handler
+      if (view === "login") {
+        await loginHandler();
+      } else {
+        setIsLoading(true);
+
+        // Simulate API Network Request for other views
+        setTimeout(() => {
+          setIsLoading(false);
+
+          if (view === "signup") {
             // API: Send OTP to email
             handleViewChange("signup-otp");
-        } else if (view === "forgot") {
+          } else if (view === "forgot") {
             // API: Send OTP to email
             handleViewChange("forgot-otp");
-        } else if (view === "signup-otp") {
+          } else if (view === "signup-otp") {
             // API: Verify OTP & Create Account
             console.log("Account Created!", { name, email, password });
             setIsOpen(false);
             resetForm(); // Reset everything
             setView("login");
-        } else if (view === "forgot-otp") {
+          } else if (view === "forgot-otp") {
             // API: Verify OTP & Reset Password
             console.log("Password Reset!", { email, newPassword });
             handleViewChange("login");
             alert("Password changed successfully! Please login.");
-        } else {
-            // Login Success
-            console.log("Logged In!", { email, password });
-            setIsOpen(false);
-        }
-      }, 1500);
+          }
+        }, 1500);
+      }
     }
   };
 
@@ -186,7 +286,7 @@ export const LoginSidebar: React.FC<LoginSidebarProps> = ({ variant = "ghost", c
       </SheetTrigger>
       <SheetPortal>
         <SheetPrimitive.Content className="fixed inset-y-0 right-0 z-50 h-full w-full border-l bg-background p-0 shadow-2xl transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-md flex flex-col">
-          
+
           {/* Header Section */}
           <div className="relative p-6 pt-12 pb-2 flex flex-col items-center">
             <SheetPrimitive.Close className="absolute right-6 top-6 rounded-full p-2 opacity-70 ring-offset-background transition-all hover:bg-secondary hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
@@ -205,7 +305,7 @@ export const LoginSidebar: React.FC<LoginSidebarProps> = ({ variant = "ghost", c
               {view === "forgot" && "Reset Password"}
               {(view === "signup-otp" || view === "forgot-otp") && "Verify Email"}
             </SheetTitle>
-            
+
             <p className="mt-2 text-center text-sm text-muted-foreground max-w-xs">
               {view === "login" && "Enter your credentials to access your personalized dashboard."}
               {view === "signup" && "Enter your details to get started with SellSync today."}
@@ -221,30 +321,29 @@ export const LoginSidebar: React.FC<LoginSidebarProps> = ({ variant = "ghost", c
           {/* Scrollable Content Area */}
           <div className="flex-1 overflow-y-auto px-6 py-4">
             <div className="flex flex-col gap-6">
-              
-              {/* Google Button (Hide during OTP or Forgot flow) */}
-              {(view === "login" || view === "signup") && (
-                <>
-                  <Button variant="outline" className="w-full py-5 flex items-center justify-center gap-3 font-normal text-gray-700 hover:text-black hover:bg-gray-50 border-gray-200">
-                     <svg className="h-5 w-5" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-                    Continue with Google
-                  </Button>
 
-                  <div className="relative">
-                    <div className="absolute inset-0 flex items-center">
-                      <span className="w-full border-t border-border" />
-                    </div>
-                    <div className="relative flex justify-center text-xs uppercase">
-                      <span className="bg-background px-2 text-muted-foreground">
-                        Or continue with email
-                      </span>
-                    </div>
-                  </div>
-                </>
+              {/* Toggle POS / Website Builder */}
+              {(view === "login" || view === "signup") && (
+                <div className="flex bg-muted p-1 rounded-lg mb-2">
+                  <button
+                    type="button"
+                    onClick={() => setLoginType("pos")}
+                    className={`flex-1 text-sm font-medium py-2 rounded-md transition-all ${loginType === "pos" ? "bg-white shadow text-foreground" : "text-muted-foreground hover:text-foreground"}`}
+                  >
+                    POS System
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setLoginType("builder")}
+                    className={`flex-1 text-sm font-medium py-2 rounded-md transition-all ${loginType === "builder" ? "bg-white shadow text-foreground" : "text-muted-foreground hover:text-foreground"}`}
+                  >
+                    Website Builder
+                  </button>
+                </div>
               )}
 
               <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                
+
                 {/* --- INPUT FIELDS --- */}
 
                 {/* Name (Signup Only) */}
@@ -264,7 +363,7 @@ export const LoginSidebar: React.FC<LoginSidebarProps> = ({ variant = "ghost", c
                     <label className="text-sm font-medium leading-none">Email</label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                      <input type="email" placeholder="name@example.com" className={`flex h-10 w-full rounded-md border bg-background px-3 py-2 pl-10 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 transition-all ${emailError ? "border-red-500 focus-visible:ring-red-500" : "border-input focus-visible:ring-orange-500"}`} value={email} onChange={(e) => setEmail(e.target.value)} />
+                      <input type="email" name="email" placeholder="name@example.com" className={`flex h-10 w-full rounded-md border bg-background px-3 py-2 pl-10 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 transition-all ${emailError ? "border-red-500 focus-visible:ring-red-500" : "border-input focus-visible:ring-orange-500"}`} value={email} onChange={handleOnChange} />
                     </div>
                     {emailError && <p className="text-[0.8rem] font-medium text-red-500">{emailError}</p>}
                   </div>
@@ -283,7 +382,7 @@ export const LoginSidebar: React.FC<LoginSidebarProps> = ({ variant = "ghost", c
                     </div>
                     <div className="relative">
                       <Lock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                      <input type={showPassword ? "text" : "password"} placeholder="••••••••" className={`flex h-10 w-full rounded-md border bg-background px-3 py-2 pl-10 pr-10 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 transition-all ${passwordError ? "border-red-500 focus-visible:ring-red-500" : "border-input focus-visible:ring-orange-500"}`} value={password} onChange={(e) => setPassword(e.target.value)} />
+                      <input type={showPassword ? "text" : "password"} name="password" placeholder="••••••••" className={`flex h-10 w-full rounded-md border bg-background px-3 py-2 pl-10 pr-10 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 transition-all ${passwordError ? "border-red-500 focus-visible:ring-red-500" : "border-input focus-visible:ring-orange-500"}`} value={password} onChange={handleOnChange} />
                       <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-2.5 text-muted-foreground hover:text-foreground focus:outline-none">
                         {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                       </button>
@@ -297,57 +396,57 @@ export const LoginSidebar: React.FC<LoginSidebarProps> = ({ variant = "ghost", c
                 {(view === "signup-otp" || view === "forgot-otp") && (
                   <div className="space-y-4 animate-in zoom-in-95 fade-in duration-300">
                     <div className="space-y-2">
-                        <label className="text-sm font-medium leading-none">One-Time Password</label>
-                        <div className="relative">
-                            <ShieldCheck className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                            <input 
-                                type="text" 
-                                placeholder="123456" 
-                                maxLength={6}
-                                className={`flex h-10 w-full rounded-md border bg-background px-3 py-2 pl-10 text-sm tracking-[0.5em] font-mono focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 transition-all ${otpError ? "border-red-500 focus-visible:ring-red-500" : "border-input focus-visible:ring-orange-500"}`} 
-                                value={otp} 
-                                onChange={(e) => setOtp(e.target.value.replace(/[^0-9]/g, ''))} 
-                            />
-                        </div>
-                        {otpError && <p className="text-[0.8rem] font-medium text-red-500">{otpError}</p>}
-                        
-                        <div className="flex justify-end">
-                            <button 
-                                type="button" 
-                                disabled={timer > 0}
-                                onClick={() => setTimer(30)}
-                                className={`text-xs font-medium ${timer > 0 ? "text-muted-foreground cursor-not-allowed" : "text-orange-600 hover:underline"}`}
-                            >
-                                {timer > 0 ? `Resend code in ${timer}s` : "Resend code"}
-                            </button>
-                        </div>
+                      <label className="text-sm font-medium leading-none">One-Time Password</label>
+                      <div className="relative">
+                        <ShieldCheck className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                        <input
+                          type="text"
+                          placeholder="123456"
+                          maxLength={6}
+                          className={`flex h-10 w-full rounded-md border bg-background px-3 py-2 pl-10 text-sm tracking-[0.5em] font-mono focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 transition-all ${otpError ? "border-red-500 focus-visible:ring-red-500" : "border-input focus-visible:ring-orange-500"}`}
+                          value={otp}
+                          onChange={(e) => setOtp(e.target.value.replace(/[^0-9]/g, ''))}
+                        />
+                      </div>
+                      {otpError && <p className="text-[0.8rem] font-medium text-red-500">{otpError}</p>}
+
+                      <div className="flex justify-end">
+                        <button
+                          type="button"
+                          disabled={timer > 0}
+                          onClick={() => setTimer(30)}
+                          className={`text-xs font-medium ${timer > 0 ? "text-muted-foreground cursor-not-allowed" : "text-orange-600 hover:underline"}`}
+                        >
+                          {timer > 0 ? `Resend code in ${timer}s` : "Resend code"}
+                        </button>
+                      </div>
                     </div>
 
                     {/* New Password Field (Only for Forgot OTP flow) */}
                     {view === "forgot-otp" && (
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium leading-none">New Password</label>
-                            <div className="relative">
-                                <KeyRound className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                                <input 
-                                    type={showNewPassword ? "text" : "password"} 
-                                    placeholder="••••••••" 
-                                    className={`flex h-10 w-full rounded-md border bg-background px-3 py-2 pl-10 pr-10 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 transition-all ${passwordError ? "border-red-500 focus-visible:ring-red-500" : "border-input focus-visible:ring-orange-500"}`} 
-                                    value={newPassword} 
-                                    onChange={(e) => setNewPassword(e.target.value)} 
-                                />
-                                <button type="button" onClick={() => setShowNewPassword(!showNewPassword)} className="absolute right-3 top-2.5 text-muted-foreground hover:text-foreground focus:outline-none">
-                                    {showNewPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                                </button>
-                            </div>
-                            {passwordError && <p className="text-[0.8rem] font-medium text-red-500">{passwordError}</p>}
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium leading-none">New Password</label>
+                        <div className="relative">
+                          <KeyRound className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                          <input
+                            type={showNewPassword ? "text" : "password"}
+                            placeholder="••••••••"
+                            className={`flex h-10 w-full rounded-md border bg-background px-3 py-2 pl-10 pr-10 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 transition-all ${passwordError ? "border-red-500 focus-visible:ring-red-500" : "border-input focus-visible:ring-orange-500"}`}
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                          />
+                          <button type="button" onClick={() => setShowNewPassword(!showNewPassword)} className="absolute right-3 top-2.5 text-muted-foreground hover:text-foreground focus:outline-none">
+                            {showNewPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                          </button>
                         </div>
+                        {passwordError && <p className="text-[0.8rem] font-medium text-red-500">{passwordError}</p>}
+                      </div>
                     )}
                   </div>
                 )}
 
                 {/* --- SUBMIT BUTTON --- */}
-                
+
                 <Button
                   type="submit"
                   disabled={isLoading}
@@ -368,23 +467,23 @@ export const LoginSidebar: React.FC<LoginSidebarProps> = ({ variant = "ghost", c
                     </>
                   )}
                 </Button>
-                
+
                 {/* Back button for secondary views */}
                 {view !== "login" && (
-                   <Button
-                   type="button"
-                   variant="ghost"
-                   disabled={isLoading}
-                   onClick={() => {
-                        if (view === "signup-otp") handleViewChange("signup");
-                        else if (view === "forgot-otp") handleViewChange("forgot");
-                        else handleViewChange("login");
-                   }}
-                   className="w-full text-muted-foreground hover:text-foreground"
-                 >
-                   <ArrowLeft className="mr-2 h-4 w-4" /> 
-                   {(view === "signup-otp" || view === "forgot-otp") ? "Back" : "Back to Login"}
-                 </Button>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    disabled={isLoading}
+                    onClick={() => {
+                      if (view === "signup-otp") handleViewChange("signup");
+                      else if (view === "forgot-otp") handleViewChange("forgot");
+                      else handleViewChange("login");
+                    }}
+                    className="w-full text-muted-foreground hover:text-foreground"
+                  >
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    {(view === "signup-otp" || view === "forgot-otp") ? "Back" : "Back to Login"}
+                  </Button>
                 )}
               </form>
 
@@ -394,7 +493,7 @@ export const LoginSidebar: React.FC<LoginSidebarProps> = ({ variant = "ghost", c
                   <span className="text-muted-foreground">
                     {view === "login" ? "Don't have an account? " : "Already have an account? "}
                   </span>
-                  <button 
+                  <button
                     type="button"
                     onClick={() => handleViewChange(view === "login" ? "signup" : "login")}
                     className="font-semibold text-foreground hover:underline hover:text-orange-600 transition-colors"
@@ -416,7 +515,7 @@ export const LoginSidebar: React.FC<LoginSidebarProps> = ({ variant = "ghost", c
               © 2025 SellSync. All rights reserved.
             </p>
           </div>
-          
+
         </SheetPrimitive.Content>
       </SheetPortal>
     </Sheet>

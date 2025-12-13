@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 
@@ -72,6 +73,62 @@ const Gallery4 = ({
   description = "Discover how leading companies and developers are leveraging modern web technologies to build exceptional digital experiences. These case studies showcase real-world applications and success stories.",
   items = data,
 }: Gallery4Props) => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.1,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: ({ index, isMobile }: { index: number; isMobile: boolean }) => {
+      if (isMobile) return { opacity: 0, y: 20 };
+
+      const remainder = index % 4;
+      switch (remainder) {
+        case 0:
+          return { opacity: 0, x: -100, y: 0 }; // Extreme Left
+        case 1:
+          return { opacity: 0, x: 100, y: 0 }; // Extreme Right
+        case 2:
+          return { opacity: 0, y: 100, x: 0 }; // Extreme Bottom
+        case 3:
+          return { opacity: 0, y: -100, x: 0 }; // Extreme Top
+        default:
+          return { opacity: 0, y: 20 };
+      }
+    },
+    visible: {
+      opacity: 1,
+      x: 0,
+      y: 0,
+      transition: {
+        type: "tween",
+        ease: [0.25, 0.1, 0.25, 1.0], // Custom cubic-bezier for smooth easing
+        duration: 1.0,
+        opacity: {
+          duration: 0.8,
+          ease: "easeOut",
+        },
+      },
+    },
+  } as const;
+
   return (
     <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-gradient-to-b from-white to-blue-50/30">
       <div className="container mx-auto px-3 sm:px-4">
@@ -93,32 +150,45 @@ const Gallery4 = ({
         </div>
       </div>
       <div className="container mx-auto px-3 sm:px-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-          {items.map((item) => (
-            <a href={item.href} key={item.id} className="group rounded-xl">
-              <div className="group relative h-full min-h-[20rem] sm:min-h-[24rem] md:min-h-[27rem] max-w-full overflow-hidden rounded-xl md:aspect-[5/4] lg:aspect-[16/9]">
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="absolute h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-black/50" />
-                <div className="absolute inset-x-0 bottom-0 flex flex-col items-start p-4 sm:p-6 md:p-8 text-white">
-                  <div className="mb-2 pt-3 sm:pt-4 text-base sm:text-lg md:text-xl font-semibold md:mb-3 lg:pt-4">
-                    {item.title}
-                  </div>
-                  <div className="mb-6 sm:mb-8 md:mb-12 lg:mb-9 line-clamp-2 text-xs sm:text-sm">
-                    {item.description}
-                  </div>
-                  <div className="flex items-center text-xs sm:text-sm">
-                    Read more{" "}
-                    <ArrowRight className="ml-2 size-4 sm:size-5 transition-transform group-hover:translate-x-1" />
+        <motion.div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: false, margin: "-50px" }}
+        >
+          {items.map((item, index) => (
+            <motion.div
+              key={item.id}
+              custom={{ index, isMobile }}
+              variants={cardVariants}
+              className="h-full"
+            >
+              <a href={item.href} className="group rounded-xl h-full block">
+                <div className="group relative h-full min-h-[20rem] sm:min-h-[24rem] md:min-h-[27rem] max-w-full overflow-hidden rounded-xl md:aspect-[5/4] lg:aspect-[16/9]">
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="absolute h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-black/50" />
+                  <div className="absolute inset-x-0 bottom-0 flex flex-col items-start p-4 sm:p-6 md:p-8 text-white">
+                    <div className="mb-2 pt-3 sm:pt-4 text-base sm:text-lg md:text-xl font-semibold md:mb-3 lg:pt-4">
+                      {item.title}
+                    </div>
+                    <div className="mb-6 sm:mb-8 md:mb-12 lg:mb-9 line-clamp-2 text-xs sm:text-sm">
+                      {item.description}
+                    </div>
+                    <div className="flex items-center text-xs sm:text-sm">
+                      Read more{" "}
+                      <ArrowRight className="ml-2 size-4 sm:size-5 transition-transform group-hover:translate-x-1" />
+                    </div>
                   </div>
                 </div>
-              </div>
-            </a>
+              </a>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

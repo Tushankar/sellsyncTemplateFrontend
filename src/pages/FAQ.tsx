@@ -83,20 +83,19 @@ export default function FAQPage() {
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-br from-background via-background to-muted/20">
       {/* Header */}
-      <header className="fixed top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 shadow-md border-muted text-foreground transition-all duration-300">
-        <div className="container flex h-20 items-center justify-between px-4 md:border-x md:border-muted">
-          <div className="flex items-center gap-3">
-            <Link to="/" className="flex items-center space-x-2">
+      <header className="fixed top-0 z-50 w-full border-b bg-white shadow-md border-gray-200 text-foreground transition-all duration-300 backdrop-blur-md supports-[backdrop-filter]:backdrop-blur-md">
+        <div className="container flex h-16 sm:h-20 items-center justify-between px-3 sm:px-4 md:border-x md:border-gray-200">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Link to="/" className="flex items-center space-x-1 sm:space-x-2">
               <img
                 src="/sellsyncbg.png"
                 alt="SellSync Logo"
-                className="h-24 w-auto"
+                className="h-10 sm:h-12 md:h-16 w-auto"
               />
-              <span className="font-bold text-xl text-foreground">SELLSYNC</span>
             </Link>
           </div>
           <nav className="hidden md:flex items-center gap-8 flex-1 justify-center">
-            {["Features", "Hardware", "Pricing", "Industries", "Demo"].map((item) => (
+            {["Products", "Hardware", "Pricing", "Industries", "Demo"].map((item) => (
               <a
                 key={item}
                 href={`/#${item.toLowerCase()}`}
@@ -108,12 +107,12 @@ export default function FAQPage() {
           </nav>
           <div className="hidden md:flex items-center gap-3 ml-auto">
             <Link to="/login">
-              <Button variant="outline" className="rounded-3xl font-bold text-xl">
+              <Button variant="outline" className="rounded-3xl font-bold text-base lg:text-xl">
                 Log In
               </Button>
             </Link>
             <Link to="/builder">
-              <Button className="rounded-3xl font-bold text-xl bg-gradient-to-r from-[#D87027] to-[#D87027] hover:from-[#D87027]/90 hover:to-[#D87027]/90 text-white shadow-lg shadow-[#D87027]/30 border border-[#D87027]/20">
+              <Button className="rounded-3xl font-bold text-base lg:text-xl bg-gradient-to-r from-[#D87027] to-[#D87027] hover:from-[#D87027]/90 hover:to-[#D87027]/90 text-white shadow-lg shadow-[#D87027]/30 border border-[#D87027]/20">
                 Get Demo
               </Button>
             </Link>
@@ -136,7 +135,7 @@ export default function FAQPage() {
               </button>
             </div>
             <nav className="p-4 space-y-4">
-              {["Features", "Hardware", "Pricing", "Industries", "Demo"].map((item) => (
+              {["Products", "Hardware", "Pricing", "Industries", "Demo"].map((item) => (
                 <a
                   key={item}
                   href={`/#${item.toLowerCase()}`}

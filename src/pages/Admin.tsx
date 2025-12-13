@@ -2,9 +2,10 @@ import { useBuilder } from '@/contexts/BuilderContext';
 import { TemplateSidebar } from '@/components/builder/TemplateSidebar';
 import { BuilderCanvas } from '@/components/builder/BuilderCanvas';
 import { PropertyPanel } from '@/components/builder/PropertyPanel';
+import { PublishModal } from '@/components/builder/PublishModal';
 import { Button } from '@/components/ui/button';
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
-import { Save, Eye, Sparkles, Layers, Menu, X, Settings, ExternalLink, Search } from 'lucide-react';
+import { Save, Eye, Sparkles, Layers, Menu, X, Settings, ExternalLink, Search, Rocket } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useState } from 'react';
@@ -29,6 +30,7 @@ export default function Admin() {
   const [showSidebar, setShowSidebar] = useState(false);
   const [showProperties, setShowProperties] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [publishModalOpen, setPublishModalOpen] = useState(false);
 
   const handleSave = async () => {
     try {
@@ -39,25 +41,19 @@ export default function Admin() {
     }
   };
 
-  const handleDeploy = async () => {
+  const handleDeploy = () => {
     if (hasUnsavedChanges) {
-      toast.error('Please save your changes first before deploying!');
+      toast.error('Please save your changes first before publishing!');
       return;
     }
 
     if (sections.length === 0) {
-      toast.error('Your website layout is empty. Add some sections before deploying!');
+      toast.error('Your website layout is empty. Add some sections before publishing!');
       return;
     }
 
-    try {
-      await deployWebsite();
-      toast.success('Website deployed successfully!');
-      window.open('https://sellsynctemplate.netlify.app/website', '_blank');
-    } catch (error) {
-      toast.error('Failed to deploy to server. Deployed locally as backup.');
-      window.open('https://sellsynctemplate.netlify.app/website', '_blank');
-    }
+    // Open the publish modal instead of deploying directly
+    setPublishModalOpen(true);
   };
 
   const handlePreview = () => {
@@ -216,10 +212,10 @@ export default function Admin() {
             onClick={handleDeploy}
             disabled={hasUnsavedChanges || sections.length === 0}
             size="sm"
-            className="gap-1 h-8 px-2 sm:px-3 bg-green-600 hover:bg-green-700 text-white text-xs"
+            className="gap-1 h-8 px-2 sm:px-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white text-xs"
             title={getDeployButtonTitle()}
           >
-            <ExternalLink className="h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0" />
+            <Rocket className="h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0" />
             <span className="hidden sm:inline">Publish</span>
           </Button>
         </div>
@@ -240,6 +236,9 @@ export default function Admin() {
           <PropertyPanel />
         </div>
       </div>
+
+      {/* Publish Modal */}
+      <PublishModal open={publishModalOpen} onOpenChange={setPublishModalOpen} />
     </div>
   );
 }
