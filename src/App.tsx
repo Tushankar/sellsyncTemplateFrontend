@@ -19,6 +19,9 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 const DemoPage = lazy(() => import("./pages/DemoPage"));
 const HardwarePage = lazy(() => import("./pages/HardwarePage"));
 const ProductDetailPage = lazy(() => import("./pages/ProductDetailPage"));
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const CookiePolicy = lazy(() => import("./pages/CookiePolicy"));
+const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 
 const queryClient = new QueryClient();
 
@@ -43,6 +46,9 @@ const App = () => (
               <Route path="/dashboard" element={<UserDashboard />} />
               <Route path="/website" element={<UserDashboard />} />
               <Route path="/faq" element={<FAQ />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/cookie-policy" element={<CookiePolicy />} />
+              <Route path="/terms-of-service" element={<TermsOfService />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

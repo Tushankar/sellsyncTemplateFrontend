@@ -48,70 +48,47 @@ export function Footer() {
         </div>
         <div className="grid grid-cols-2 gap-6 sm:gap-3 sm:grid-cols-2 lg:grid-cols-1">
           <div>
-            <h3 className="text-base sm:text-lg font-medium text-white">Company</h3>
+            <h3 className="text-base sm:text-lg font-medium text-white">Navigate</h3>
             <nav className="mt-3 sm:mt-4 flex flex-col space-y-2 text-xs sm:text-sm">
-              <a href="/#overview" className="text-blue-100 hover:text-white">
-                About Us
+              <a href="/#products" className="text-blue-100 hover:text-white">
+                Products
               </a>
-              <a href="#" className="text-blue-100 hover:text-white">
-                Careers
+              <a href="/#hardware" className="text-blue-100 hover:text-white">
+                Hardware
               </a>
-              <a href="#" className="text-blue-100 hover:text-white">
-                Privacy Policy
+              <a href="/#pricing" className="text-blue-100 hover:text-white">
+                Pricing
               </a>
-              <a href="#" className="text-blue-100 hover:text-white">
-                Terms of Service
+              <a href="/#industries" className="text-blue-100 hover:text-white">
+                Industries
               </a>
             </nav>
           </div>
           <div>
             <h3 className="text-base sm:text-lg font-medium text-white">Support</h3>
             <nav className="mt-3 sm:mt-4 flex flex-col space-y-2 text-xs sm:text-sm">
-              <a href="#" className="text-blue-100 hover:text-white">
-                Help Center
-              </a>
-              <a href="#" className="text-blue-100 hover:text-white">
+              <a href="/#contact" className="text-blue-100 hover:text-white">
                 Contact Us
               </a>
-              <a href="#" className="text-blue-100 hover:text-white">
-                Onboarding
-              </a>
-              <a href="#" className="text-blue-100 hover:text-white">
-                Status
-              </a>
+              <Link to="/faq" className="text-blue-100 hover:text-white">
+                FAQ
+              </Link>
             </nav>
           </div>
         </div>
         <div className="grid grid-cols-2 gap-6 sm:gap-3 sm:grid-cols-2 lg:grid-cols-1">
           <div>
-            <h3 className="text-base sm:text-lg font-medium text-white">Resources</h3>
-            <nav className="mt-3 sm:mt-4 flex flex-col space-y-2 text-xs sm:text-sm">
-              <a href="#" className="text-blue-100 hover:text-white">
-                Blog
-              </a>
-              <a href="#" className="text-blue-100 hover:text-white">
-                Guides
-              </a>
-              <a href="#" className="text-blue-100 hover:text-white">
-                API Docs
-              </a>
-              <a href="#" className="text-blue-100 hover:text-white">
-                Changelog
-              </a>
-            </nav>
-          </div>
-          <div>
             <h3 className="text-base sm:text-lg font-medium text-white">Legal</h3>
             <nav className="mt-3 sm:mt-4 flex flex-col space-y-2 text-xs sm:text-sm">
-              <a href="#" className="text-blue-100 hover:text-white">
+              <Link to="/privacy-policy" className="text-blue-100 hover:text-white">
+                Privacy Policy
+              </Link>
+              <Link to="/terms-of-service" className="text-blue-100 hover:text-white">
+                Terms of Service
+              </Link>
+              <Link to="/cookie-policy" className="text-blue-100 hover:text-white">
                 Cookie Policy
-              </a>
-              <a href="#" className="text-blue-100 hover:text-white">
-                Security
-              </a>
-              <a href="#" className="text-blue-100 hover:text-white">
-                GDPR
-              </a>
+              </Link>
             </nav>
           </div>
         </div>
