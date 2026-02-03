@@ -1,10 +1,12 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Link } from "react-router-dom"
 import { motion } from "framer-motion"
 import {
   Menu,
   X,
+  Check,
   ArrowRight,
+  ArrowLeft,
   ChevronRight,
   Mail,
   MapPin,
@@ -30,6 +32,9 @@ import {
   DollarSign,
   Building2,
   Star,
+  Monitor,
+  Minus,
+  Plus,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Button as MovingBorderButton } from "@/components/ui/moving-border"
@@ -81,6 +86,37 @@ export function SellSyncPOS() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [scrollY, setScrollY] = useState(0)
   const [isMobile, setIsMobile] = useState(false)
+  const [demoStep, setDemoStep] = useState(1)
+  const [selectedFeatures, setSelectedFeatures] = useState<Record<string, boolean>>({
+    "Customized Panels": false,
+    "Shift Reconciliation": false,
+    "Track Inventory": false,
+    "Core Reports": false,
+    "Core Discounts": false,
+    "Accept Credit Cards": false,
+    "Multi Store Support": false,
+    "Manufacturer Discounts": false,
+    "Website template": false,
+  })
+
+
+  const [checkoutStations, setCheckoutStations] = useState(1)
+  const [addFtxUplift, setAddFtxUplift] = useState(false)
+
+  const audioRef = useRef(new Audio("https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"));
+
+  const toggleFeature = (feature: string) => {
+    if (audioRef.current) {
+      audioRef.current.currentTime = 0;
+      audioRef.current.volume = 0.5;
+      audioRef.current.play().catch((e) => console.error("Audio play failed", e));
+    }
+
+    setSelectedFeatures(prev => ({
+      ...prev,
+      [feature]: !prev[feature]
+    }))
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -102,6 +138,19 @@ export function SellSyncPOS() {
     }
   }, [])
 
+  // Handle hash scrolling on page load
+  useEffect(() => {
+    const hash = window.location.hash
+    if (hash) {
+      const element = document.getElementById(hash.substring(1))
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' })
+        }, 100)
+      }
+    }
+  }, [])
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
   }
@@ -112,19 +161,19 @@ export function SellSyncPOS() {
       <header
         className="fixed top-0 z-50 w-full border-b bg-white shadow-md border-gray-200 text-foreground transition-all duration-300 pointer-events-none backdrop-blur-md supports-[backdrop-filter]:backdrop-blur-md"
       >
-        <div className="container flex h-16 sm:h-20 items-center justify-between px-3 sm:px-4 md:border-x md:border-gray-200">
+        <div className="container flex h-20 sm:h-24 items-center justify-between px-3 sm:px-4 md:border-x md:border-gray-200">
           <div className="flex items-center gap-2 sm:gap-3">
             <a href="#hero" className="flex items-center space-x-1 sm:space-x-2 pointer-events-auto">
               <img
-                src="/sellsyncbg.png"
+                src="/sellsynclogo.png"
                 alt="SellSync Logo"
-                className="h-10 sm:h-12 md:h-16 w-auto"
+                className="h-12 sm:h-16 md:h-20 w-auto"
               />
 
             </a>
           </div>
           <nav className="hidden md:flex items-center gap-6 lg:gap-8 pointer-events-auto flex-1 justify-center">
-            {["Products", "Hardware", "Pricing", "Industries", "Demo"].map((item) => (
+            {["Products", "Hardware", "Pricing", "Industries", "Contact"].map((item) => (
               <a
                 key={item}
                 href={`#${item.toLowerCase()}`}
@@ -139,7 +188,7 @@ export function SellSyncPOS() {
               variant="outline"
               className="rounded-3xl font-bold text-base lg:text-xl"
             />
-            <Link to="/builder">
+            <Link to="/demo">
               <Button className="rounded-3xl font-bold text-base lg:text-xl bg-gradient-to-r from-[#D87027] to-[#D87027] hover:from-[#D87027]/90 hover:to-[#D87027]/90 text-white shadow-lg shadow-[#D87027]/30 border border-[#D87027]/20">
                 Get Demo
               </Button>
@@ -160,15 +209,15 @@ export function SellSyncPOS() {
           exit={{ opacity: 0 }}
           className="fixed inset-0 z-50 bg-background md:hidden overflow-y-auto"
         >
-          <div className="container flex h-16 items-center justify-between px-3 sm:px-4">
+          <div className="container flex h-20 items-center justify-between px-3 sm:px-4">
             <div className="flex items-center gap-2 sm:gap-3">
               <a href="#hero" className="flex items-center space-x-2" onClick={toggleMenu}>
                 <img
-                  src="/sellsyncbg.png"
+                  src="/sellsynclogo.png"
                   alt="SellSync Logo"
-                  className="h-10 w-auto"
+                  className="h-12 w-auto"
                 />
-                <span className="font-bold text-lg sm:text-xl bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">SellSync</span>
+
               </a>
             </div>
             <button onClick={toggleMenu}>
@@ -182,7 +231,7 @@ export function SellSyncPOS() {
             animate="visible"
             className="container grid gap-3 pb-8 pt-6 px-3 sm:px-4"
           >
-            {["Products", "Hardware", "Pricing", "Industries", "Demo"].map((item, index) => (
+            {["Products", "Hardware", "Pricing", "Industries", "Contact"].map((item, index) => (
               <motion.div key={index} variants={itemFadeIn}>
                 <a
                   href={`#${item.toLowerCase()}`}
@@ -283,7 +332,7 @@ export function SellSyncPOS() {
                   transition={{ duration: 0.7, delay: 0.6 }}
                   className="flex flex-col sm:flex-row gap-2 sm:gap-3 items-stretch sm:items-center w-full max-w-full sm:max-w-md pt-2"
                 >
-                  <Link to="/builder" className="w-full sm:flex-1 sm:max-w-[200px] pointer-events-auto">
+                  <Link to="/demo" className="w-full sm:flex-1 sm:max-w-[200px] pointer-events-auto">
                     <Button size="lg" className="rounded-3xl group w-full justify-center text-xs sm:text-base px-4 sm:px-6 md:px-8 py-4 sm:py-6 md:py-7 bg-gradient-to-r from-[#D87027] to-[#D87027] hover:from-[#D87027]/90 hover:to-[#D87027]/90 text-white shadow-lg shadow-[#D87027]/30 border border-[#D87027]/20">
                       Get a Free Demo
                       <motion.span
@@ -628,15 +677,15 @@ export function SellSyncPOS() {
         {/* Demo Request Section */}
         {/* Book a Demo Section */}
         <section
-          id="demo"
-          className="w-full py-12 sm:py-16 md:py-20 lg:py-24 px-3 sm:px-4 md:px-6 bg-gradient-to-b from-background to-muted/10"
+          id="contact"
+          className="w-full py-8 sm:py-12 md:py-16 lg:py-20 xl:py-24 px-3 sm:px-4 md:px-6 bg-[#F9F9F9]"
         >
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeIn}
-            className="container grid items-center gap-8 md:gap-12 lg:gap-16 grid-cols-1 lg:grid-cols-2"
+            className="container grid items-center gap-6 sm:gap-8 md:gap-10 lg:gap-12 xl:gap-16 grid-cols-1 lg:grid-cols-2"
           >
             {/* Left Content */}
             <motion.div
@@ -676,7 +725,7 @@ export function SellSyncPOS() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4"
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3 sm:gap-4 pt-4"
               >
                 {[
                   { icon: <Calendar className="h-5 w-5" />, label: "Live Product Walkthrough" },
@@ -705,14 +754,22 @@ export function SellSyncPOS() {
                 transition={{ duration: 0.6, delay: 0.4 }}
                 className="flex items-center gap-4 pt-4 text-sm text-gray-600"
               >
-                <div className="flex -space-x-2">
-                  {[1, 2, 3].map((i) => (
-                    <div
+                <div className="flex -space-x-4">
+                  {[
+                    "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=faces",
+                    "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop&crop=faces",
+                    "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&h=100&fit=crop&crop=faces",
+                    "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=faces"
+                  ].map((src, i) => (
+                    <motion.div
                       key={i}
-                      className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 border-2 border-white flex items-center justify-center text-white text-xs font-bold"
+                      className="w-10 h-10 rounded-full border-2 border-white overflow-hidden relative cursor-pointer"
+                      whileHover={{ scale: 1.25, zIndex: 20, y: -5 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                      style={{ zIndex: i }}
                     >
-                      {i}
-                    </div>
+                      <img src={src} alt="User" className="w-full h-full object-cover" />
+                    </motion.div>
                   ))}
                 </div>
                 <span>Join 500+ retail partners already using SellSync</span>
@@ -729,127 +786,276 @@ export function SellSyncPOS() {
               {/* Form Background Glow */}
               <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-2xl sm:rounded-3xl blur-xl"></div>
 
-              <div className="relative rounded-2xl sm:rounded-3xl border border-gray-200 bg-white p-6 sm:p-8 shadow-lg hover:shadow-2xl transition-shadow duration-300">
-                <h3 className="text-2xl sm:text-2xl font-bold mb-2 text-gray-900">Book Your Free Demo</h3>
-                <p className="text-sm text-gray-600 mb-6">Takes just 15 minutes. Our team will be in touch within 2 hours.</p>
-
-                <form className="space-y-4 sm:space-y-5">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <motion.div
-                      className="space-y-2"
-                      whileHover={{ y: -2 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <label htmlFor="full-name" className="text-sm font-semibold text-gray-700">Full Name</label>
-                      <Input
-                        id="full-name"
-                        placeholder="John Doe"
-                        className="rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm"
-                      />
-                    </motion.div>
-                    <motion.div
-                      className="space-y-2"
-                      whileHover={{ y: -2 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <label htmlFor="store-name" className="text-sm font-semibold text-gray-700">Store Name</label>
-                      <Input
-                        id="store-name"
-                        placeholder="Your Store Name"
-                        className="rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm"
-                      />
-                    </motion.div>
+              {demoStep === 1 ? (
+                <div className="relative rounded-2xl sm:rounded-3xl border border-gray-200 bg-white p-4 sm:p-6 md:p-8 lg:p-10 shadow-lg hover:shadow-2xl transition-shadow duration-300 h-full flex flex-col justify-center items-center text-center">
+                  <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 sm:mb-8 md:mb-10 text-gray-900">Choose Your Features</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-x-6 md:gap-y-6 w-full mb-6 sm:mb-8 md:mb-12">
+                    {[
+                      "Customized Panels",
+                      "Shift Reconciliation",
+                      "Track Inventory",
+                      "Core Reports",
+                      "Core Discounts",
+                      "Accept Credit Cards",
+                      "Multi Store Support",
+                      "Manufacturer Discounts",
+                      "Website template"
+                    ].map((feature) => (
+                      <div key={feature} className="flex flex-row md:flex-col items-center justify-between md:justify-center gap-3 w-full p-3 md:p-0 rounded-xl md:rounded-none bg-gray-50 md:bg-transparent border border-gray-100 md:border-none">
+                        <span className="text-xs sm:text-sm font-semibold text-gray-700 flex-1 md:flex-none text-left md:text-center md:whitespace-nowrap">{feature}</span>
+                        <div
+                          onClick={() => toggleFeature(feature)}
+                          className="cursor-pointer flex-shrink-0"
+                        >
+                          <motion.div
+                            className={`w-20 sm:w-24 h-9 sm:h-10 rounded-full p-1 flex items-center ${selectedFeatures[feature] ? 'bg-[#D87027]' : 'bg-gray-200'
+                              } transition-colors duration-300 relative`}
+                            animate={{ backgroundColor: selectedFeatures[feature] ? '#D87027' : '#E5E7EB' }}
+                            whileTap={{ scale: 0.95 }}
+                          >
+                            <motion.div
+                              layout
+                              transition={{ type: "spring", stiffness: 700, damping: 30 }}
+                              className={`h-7 sm:h-8 w-7 sm:w-8 rounded-full shadow-md flex items-center justify-center absolute top-1 ${selectedFeatures[feature] ? 'right-1 bg-white' : 'left-1 bg-white'}`}
+                            >
+                              {selectedFeatures[feature] ? <CheckCircle className="text-[#D87027] w-4 sm:w-5 h-4 sm:h-5" /> : <X className="text-gray-400 w-3 sm:w-4 h-3 sm:h-4" />}
+                            </motion.div>
+                            <div className={`absolute left-2 sm:left-3 text-[10px] font-bold text-white/90 ${selectedFeatures[feature] ? 'opacity-100' : 'opacity-0'}`}><Check className="w-3 sm:w-4 h-3 sm:h-4" strokeWidth={4} /></div>
+                            <div className={`absolute right-2 sm:right-3 text-[10px] font-bold text-gray-500 ${!selectedFeatures[feature] ? 'opacity-100' : 'opacity-0'}`}><X className="w-3 sm:w-4 h-3 sm:h-4" strokeWidth={4} /></div>
+                          </motion.div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-
-                  <motion.div
-                    className="space-y-2"
-                    whileHover={{ y: -2 }}
-                    transition={{ duration: 0.2 }}
+                  <Button
+                    onClick={() => setDemoStep(2)}
+                    className="rounded-3xl bg-gradient-to-r from-[#D87027] to-[#D87027] hover:from-[#D87027]/90 hover:to-[#D87027]/90 text-white font-bold py-4 sm:py-5 md:py-6 px-8 sm:px-12 md:px-16 text-base sm:text-lg shadow-lg shadow-[#D87027]/30 border border-[#D87027]/20 transition-all duration-300 w-full sm:w-auto"
                   >
-                    <label htmlFor="email" className="text-sm font-semibold text-gray-700">Business Email</label>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="you@company.com"
-                      className="rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm"
-                    />
-                  </motion.div>
-
-                  <motion.div
-                    className="space-y-2"
-                    whileHover={{ y: -2 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <label htmlFor="phone" className="text-sm font-semibold text-gray-700">Phone Number</label>
-                    <Input
-                      id="phone"
-                      type="tel"
-                      placeholder="+1 (555) 000-0000"
-                      className="rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm"
-                    />
-                  </motion.div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <motion.div
-                      className="space-y-2"
-                      whileHover={{ y: -2 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <label htmlFor="store-type" className="text-sm font-semibold text-gray-700">Store Type</label>
-                      <Select>
-                        <SelectTrigger className="rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm">
-                          <SelectValue placeholder="Select store type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="grocery">Grocery & Supermarket</SelectItem>
-                          <SelectItem value="convenience">Convenience Store</SelectItem>
-                          <SelectItem value="clothing">Clothing & Fashion</SelectItem>
-                          <SelectItem value="electronics">Electronics</SelectItem>
-                          <SelectItem value="liquor">Liquor & Tobacco</SelectItem>
-                          <SelectItem value="beauty">Beauty & Cosmetics</SelectItem>
-                          <SelectItem value="pet">Pet Store</SelectItem>
-                          <SelectItem value="pharmacy">Pharmacy</SelectItem>
-                          <SelectItem value="specialty">Specialty Retail</SelectItem>
-                          <SelectItem value="other">Other</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </motion.div>
-
-                    <motion.div
-                      className="space-y-2"
-                      whileHover={{ y: -2 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <label htmlFor="locations" className="text-sm font-semibold text-gray-700">Number of Locations</label>
-                      <Input
-                        id="locations"
-                        type="number"
-                        min="1"
-                        placeholder="e.g., 1"
-                        className="rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm"
-                      />
-                    </motion.div>
-                  </div>
-
-                  <motion.div
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="pt-2"
-                  >
+                    <ArrowRight className="mr-2 h-4 sm:h-5 w-4 sm:w-5" /> Continue to Setup
+                  </Button>
+                </div>
+              ) : demoStep === 2 ? (
+                <div className="relative rounded-2xl sm:rounded-3xl border border-gray-200 bg-white p-4 sm:p-6 md:p-8 lg:p-10 shadow-lg hover:shadow-2xl transition-shadow duration-300 h-full flex flex-col">
+                  <div className="w-full flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6 sm:mb-8">
+                    <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">Store Configuration</h3>
                     <Button
-                      type="submit"
-                      className="w-full rounded-3xl bg-gradient-to-r from-[#D87027] to-[#D87027] hover:from-[#D87027]/90 hover:to-[#D87027]/90 text-white font-bold py-3 text-base lg:text-xl shadow-lg shadow-[#D87027]/30 border border-[#D87027]/20 transition-all duration-300"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setDemoStep(1)}
+                      className="text-[#D87027] hover:text-[#D87027] hover:bg-orange-50 self-start sm:self-auto"
                     >
-                      Schedule My Demo
-                      <ArrowRight className="ml-2 h-4 w-4" />
+                      <ArrowLeft className="mr-1 sm:mr-2 h-4 w-4" /> <span className="text-sm">Back</span>
                     </Button>
-                  </motion.div>
+                  </div>
 
-                  <p className="text-xs text-gray-500 text-center pt-2">
-                    ✓ No credit card required • ✓ 15 minute session • ✓ Expert consultation
-                  </p>
-                </form>
-              </div>
+                  <div className="w-full space-y-6 sm:space-y-8 flex-1">
+                    {/* Checkout Stations */}
+                    <div className="space-y-3 sm:space-y-4">
+                      <label htmlFor="stations" className="text-base sm:text-lg font-semibold text-gray-800 flex items-center gap-2">
+                        <Monitor className="h-4 sm:h-5 w-4 sm:w-5 text-[#D87027] flex-shrink-0" />
+                        <span className="leading-tight">Number of Checkout Stations</span>
+                      </label>
+                      <div className="flex items-center gap-3 sm:gap-4 justify-center sm:justify-start">
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() => setCheckoutStations(Math.max(1, checkoutStations - 1))}
+                          className="h-10 w-10 sm:h-12 sm:w-12 rounded-full border-gray-300 hover:border-[#D87027] hover:text-[#D87027] flex-shrink-0"
+                        >
+                          <Minus className="h-3 sm:h-4 w-3 sm:w-4" />
+                        </Button>
+                        <Input
+                          id="stations"
+                          type="number"
+                          value={checkoutStations}
+                          onChange={(e) => setCheckoutStations(parseInt(e.target.value) || 1)}
+                          className="h-10 sm:h-12 text-center text-lg sm:text-xl font-bold rounded-xl border-gray-300 focus:border-[#D87027] focus:ring-[#D87027] w-20 sm:w-24 md:max-w-[100px]"
+                          min="1"
+                        />
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() => setCheckoutStations(checkoutStations + 1)}
+                          className="h-10 w-10 sm:h-12 sm:w-12 rounded-full border-gray-300 hover:border-[#D87027] hover:text-[#D87027] flex-shrink-0"
+                        >
+                          <Plus className="h-3 sm:h-4 w-3 sm:w-4" />
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* FTx Uplift */}
+                    <div
+                      className={`relative overflow-hidden rounded-xl sm:rounded-2xl border-2 transition-all duration-300 cursor-pointer ${addFtxUplift ? 'border-[#D87027] bg-orange-50/50' : 'border-gray-200 hover:border-gray-300'}`}
+                      onClick={() => setAddFtxUplift(!addFtxUplift)}
+                    >
+                      <div className="p-4 sm:p-5 md:p-6">
+                        <div className="flex flex-col sm:flex-row items-start justify-between gap-3 sm:gap-4">
+                          <div className="space-y-2 flex-1">
+                            <div className="flex items-start sm:items-center gap-2 flex-wrap">
+                              <span className="text-sm sm:text-base md:text-lg font-bold text-gray-900 leading-tight">Automated Upselling Ad & Script (FTx Uplift)</span>
+                              {addFtxUplift && <CheckCircle className="h-4 sm:h-5 w-4 sm:w-5 text-[#D87027] flex-shrink-0" />}
+                            </div>
+                            <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                              Maximize your revenue with our intelligent upselling engine. FTx Uplift automatically suggests relevant add-ons and promotions to your staff during checkout, ensuring you never miss a sale opportunity.
+                            </p>
+                            <div className="pt-1 sm:pt-2">
+                              <span className="inline-flex items-center rounded-full bg-green-100 px-2 sm:px-2.5 py-0.5 text-xs font-medium text-green-800">
+                                Recommended
+                              </span>
+                            </div>
+                          </div>
+                          <div className={`flex-shrink-0 h-6 w-11 rounded-full p-1 transition-colors duration-200 ease-in-out ${addFtxUplift ? 'bg-[#D87027]' : 'bg-gray-200'} self-start sm:self-auto mt-2 sm:mt-0`}>
+                            <div className={`h-4 w-4 rounded-full bg-white shadow transform transition duration-200 ease-in-out ${addFtxUplift ? 'translate-x-5' : 'translate-x-0'}`} />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-6 sm:mt-8 md:mt-10 w-full flex justify-center">
+                    <Button
+                      onClick={() => setDemoStep(3)}
+                      className="rounded-3xl bg-gradient-to-r from-[#D87027] to-[#D87027] hover:from-[#D87027]/90 hover:to-[#D87027]/90 text-white font-bold py-4 sm:py-5 md:py-6 px-8 sm:px-12 md:px-16 text-base sm:text-lg shadow-lg shadow-[#D87027]/30 border border-[#D87027]/20 transition-all duration-300 w-full sm:w-auto"
+                    >
+                      <CheckCircle className="mr-2 h-4 sm:h-5 w-4 sm:w-5" /> Continue to Details
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <div className="relative rounded-2xl sm:rounded-3xl border border-gray-200 bg-white p-4 sm:p-6 md:p-8 shadow-lg hover:shadow-2xl transition-shadow duration-300">
+                  <div className="flex flex-col sm:flex-row items-start justify-between gap-3 mb-4 sm:mb-6">
+                    <div className="flex-1">
+                      <h3 className="text-xl sm:text-2xl font-bold mb-1 sm:mb-2 text-gray-900">Book Your Free Demo</h3>
+                      <p className="text-xs sm:text-sm text-gray-600">Takes just 15 minutes. Our team will be in touch within 2 hours.</p>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setDemoStep(2)}
+                      className="text-[#D87027] hover:text-[#D87027] hover:bg-orange-50 self-start sm:self-auto -mt-1 sm:-mt-2 -mr-1 sm:-mr-2"
+                    >
+                      <ArrowLeft className="mr-1 sm:mr-2 h-4 w-4" /> <span className="text-sm">Back</span>
+                    </Button>
+                  </div>
+
+                  <form className="space-y-3 sm:space-y-4 md:space-y-5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                      <motion.div
+                        className="space-y-1.5 sm:space-y-2"
+                        whileHover={{ y: -2 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <label htmlFor="full-name" className="text-xs sm:text-sm font-semibold text-gray-700">Full Name</label>
+                        <Input
+                          id="full-name"
+                          placeholder="John Doe"
+                          className="rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm h-10 sm:h-11"
+                        />
+                      </motion.div>
+                      <motion.div
+                        className="space-y-1.5 sm:space-y-2"
+                        whileHover={{ y: -2 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <label htmlFor="store-name" className="text-xs sm:text-sm font-semibold text-gray-700">Store Name</label>
+                        <Input
+                          id="store-name"
+                          placeholder="Your Store Name"
+                          className="rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm h-10 sm:h-11"
+                        />
+                      </motion.div>
+                    </div>
+
+                    <motion.div
+                      className="space-y-1.5 sm:space-y-2"
+                      whileHover={{ y: -2 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <label htmlFor="email" className="text-xs sm:text-sm font-semibold text-gray-700">Business Email</label>
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="you@company.com"
+                        className="rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm h-10 sm:h-11"
+                      />
+                    </motion.div>
+
+                    <motion.div
+                      className="space-y-1.5 sm:space-y-2"
+                      whileHover={{ y: -2 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <label htmlFor="phone" className="text-xs sm:text-sm font-semibold text-gray-700">Phone Number</label>
+                      <Input
+                        id="phone"
+                        type="tel"
+                        placeholder="+1 (555) 000-0000"
+                        className="rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm h-10 sm:h-11"
+                      />
+                    </motion.div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                      <motion.div
+                        className="space-y-1.5 sm:space-y-2"
+                        whileHover={{ y: -2 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <label htmlFor="store-type" className="text-xs sm:text-sm font-semibold text-gray-700">Store Type</label>
+                        <Select>
+                          <SelectTrigger className="rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm h-10 sm:h-11">
+                            <SelectValue placeholder="Select store type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="grocery">Grocery & Supermarket</SelectItem>
+                            <SelectItem value="convenience">Convenience Store</SelectItem>
+                            <SelectItem value="clothing">Clothing & Fashion</SelectItem>
+                            <SelectItem value="electronics">Electronics</SelectItem>
+                            <SelectItem value="liquor">Liquor & Tobacco</SelectItem>
+                            <SelectItem value="beauty">Beauty & Cosmetics</SelectItem>
+                            <SelectItem value="pet">Pet Store</SelectItem>
+                            <SelectItem value="pharmacy">Pharmacy</SelectItem>
+                            <SelectItem value="specialty">Specialty Retail</SelectItem>
+                            <SelectItem value="other">Other</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </motion.div>
+
+                      <motion.div
+                        className="space-y-1.5 sm:space-y-2"
+                        whileHover={{ y: -2 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <label htmlFor="locations" className="text-xs sm:text-sm font-semibold text-gray-700">Number of Locations</label>
+                        <Input
+                          id="locations"
+                          type="number"
+                          min="1"
+                          placeholder="e.g., 1"
+                          className="rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm h-10 sm:h-11"
+                        />
+                      </motion.div>
+                    </div>
+
+                    <motion.div
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="pt-1 sm:pt-2"
+                    >
+                      <Button
+                        type="submit"
+                        className="w-full rounded-3xl bg-gradient-to-r from-[#D87027] to-[#D87027] hover:from-[#D87027]/90 hover:to-[#D87027]/90 text-white font-bold py-3 sm:py-3.5 text-sm sm:text-base lg:text-lg shadow-lg shadow-[#D87027]/30 border border-[#D87027]/20 transition-all duration-300"
+                      >
+                        Schedule My Demo
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </Button>
+                    </motion.div>
+
+                    <p className="text-xs text-gray-500 text-center pt-1 sm:pt-2">
+                      ✓ No credit card required • ✓ 15 minute session • ✓ Expert consultation
+                    </p>
+                  </form>
+                </div>
+              )}
             </motion.div>
           </motion.div>
         </section>
@@ -939,7 +1145,7 @@ export function SellSyncPOS() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              <Link to="/builder">
+              <Link to="/demo">
                 <Button size="lg" className="rounded-3xl bg-gradient-to-r from-[#D87027] to-[#D87027] hover:from-[#D87027]/90 hover:to-[#D87027]/90 text-white shadow-lg shadow-[#D87027]/30 border border-[#D87027]/20 px-6 sm:px-8 py-5 sm:py-6 text-sm sm:text-base">
                   Get a Free Demo Now
                   <ArrowRight className="ml-2 h-4 sm:h-5 w-4 sm:w-5" />
@@ -951,7 +1157,7 @@ export function SellSyncPOS() {
       </main>
 
       {/* Footer */}
-      <footer className="w-full" style={{ backgroundColor: "#2463EB" }}>
+      <footer className="w-full" style={{ backgroundColor: "#1C244B" }}>
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -1064,7 +1270,7 @@ export function SellSyncPOS() {
             </form>
           </div>
         </motion.div>
-        <div className="border-t border-blue-300" style={{ backgroundColor: "#1a4cc8" }}>
+        <div className="border-t border-blue-300" style={{ backgroundColor: "#1C244B" }}>
           <div className="container flex flex-col items-center justify-between gap-2 sm:gap-3 py-4 sm:py-6 md:h-16 md:flex-row md:py-0 px-3 sm:px-4">
             <p className="text-xs text-blue-100 text-center md:text-left">
               &copy; {new Date().getFullYear()} SellSync. All rights reserved.
@@ -1073,6 +1279,6 @@ export function SellSyncPOS() {
           </div>
         </div>
       </footer>
-    </div>
+    </div >
   )
 }

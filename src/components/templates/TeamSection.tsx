@@ -2,6 +2,7 @@ import { SectionData } from '@/types/builder';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Mail, Linkedin, Twitter } from 'lucide-react';
+import { getImageUrl } from '@/lib/api';
 
 interface TeamSectionProps {
   data: SectionData['data'];
@@ -52,7 +53,7 @@ export function TeamSection({ data, variant = 'grid', isPreview }: TeamSectionPr
                 <CardContent className="p-8">
                   <div className="flex items-start gap-6">
                     <Avatar className="w-20 h-20">
-                      <AvatarImage src={item.image?.src} alt={item.name} />
+                      <AvatarImage src={getImageUrl(item.image?.src)} alt={item.name} />
                       <AvatarFallback className="text-lg">{item.name?.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <div className="flex-1 space-y-3">
@@ -122,7 +123,7 @@ export function TeamSection({ data, variant = 'grid', isPreview }: TeamSectionPr
             >
               <CardContent className="p-8 space-y-4">
                 <Avatar className="w-24 h-24 mx-auto">
-                  <AvatarImage src={item.image?.src} alt={item.name} />
+                  <AvatarImage src={getImageUrl(item.image?.src)} alt={item.name} />
                   <AvatarFallback className="text-xl">{item.name?.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div className="space-y-2">

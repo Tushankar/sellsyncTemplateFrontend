@@ -5,10 +5,11 @@ import { PropertyPanel } from '@/components/builder/PropertyPanel';
 import { PublishModal } from '@/components/builder/PublishModal';
 import { Button } from '@/components/ui/button';
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
-import { Save, Eye, Sparkles, Layers, Menu, X, Settings, ExternalLink, Search, Rocket } from 'lucide-react';
+import { Save, Eye, Sparkles, Layers, Menu, X, Settings, ExternalLink, Search, Rocket, LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useState } from 'react';
+import Cookies from 'js-cookie';
 import { templateSections } from '@/lib/templates';
 import {
   Command,
@@ -59,6 +60,16 @@ export default function Admin() {
   const handlePreview = () => {
     saveWebsite();
     navigate('/dashboard');
+  };
+
+  const handleLogout = () => {
+    // Clear all authentication cookies
+    Cookies.remove('authToken');
+    Cookies.remove('u_id');
+    Cookies.remove('u_type');
+    
+    toast.success('Logged out successfully!');
+    navigate('/');
   };
 
   const getDeployButtonTitle = () => {
@@ -217,6 +228,15 @@ export default function Admin() {
           >
             <Rocket className="h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0" />
             <span className="hidden sm:inline">Publish</span>
+          </Button>
+          <Button
+            onClick={handleLogout}
+            size="sm"
+            variant="outline"
+            className="gap-1 h-8 px-2 sm:px-3 text-xs border-red-200 hover:border-red-300 hover:bg-red-50 hover:text-red-600"
+          >
+            <LogOut className="h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0" />
+            <span className="hidden sm:inline">Logout</span>
           </Button>
         </div>
       </header>

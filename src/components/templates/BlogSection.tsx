@@ -3,6 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Calendar, Clock, User, ArrowRight } from 'lucide-react';
+import { getImageUrl } from '@/lib/api';
 
 interface BlogSectionProps {
   data: SectionData['data'];
@@ -151,7 +152,7 @@ export function BlogSection({ data, variant = 'grid', isPreview }: BlogSectionPr
                   <div className="grid md:grid-cols-[300px_1fr] gap-6">
                     <div className="aspect-video md:aspect-square overflow-hidden relative bg-gradient-to-br from-muted to-muted/50">
                       <img
-                        src={item.image?.src}
+                        src={getImageUrl(item.image?.src)}
                         alt={item.image?.alt}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       />
@@ -242,7 +243,7 @@ export function BlogSection({ data, variant = 'grid', isPreview }: BlogSectionPr
               >
                 <div className="aspect-video overflow-hidden relative bg-gradient-to-br from-muted to-muted/50">
                   <img
-                    src={item.image?.src}
+                    src={getImageUrl(item.image?.src)}
                     alt={item.image?.alt}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
@@ -403,7 +404,7 @@ export function BlogSection({ data, variant = 'grid', isPreview }: BlogSectionPr
               >
                 <div className="aspect-video overflow-hidden relative bg-gradient-to-br from-muted to-muted/50">
                   <img
-                    src={item.image?.src}
+                    src={getImageUrl(item.image?.src)}
                     alt={item.image?.alt}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
@@ -532,7 +533,7 @@ export function BlogSection({ data, variant = 'grid', isPreview }: BlogSectionPr
                         {item.image && (
                           <div className="md:w-48 aspect-video overflow-hidden rounded-lg bg-gradient-to-br from-muted to-muted/50">
                             <img
-                              src={item.image.src}
+                              src={getImageUrl(item.image.src)}
                               alt={item.image.alt}
                               className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                             />
@@ -583,7 +584,7 @@ export function BlogSection({ data, variant = 'grid', isPreview }: BlogSectionPr
             >
               <div className="aspect-video overflow-hidden relative bg-gradient-to-br from-muted to-muted/50">
                 <img
-                  src={item.image?.src}
+                  src={getImageUrl(item.image?.src)}
                   alt={item.image?.alt}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />

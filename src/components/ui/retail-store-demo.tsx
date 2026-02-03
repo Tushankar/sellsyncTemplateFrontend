@@ -5,6 +5,13 @@ import {
   GalleryGridCell,
 } from "@/components/ui/cta-section-gallery"
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import {
   ShoppingCart,
   Store,
   Shirt,
@@ -66,6 +73,41 @@ const CATEGORIES = [
   { name: "Art Supplies", icon: Palette },
 ]
 
+const MODAL_CATEGORIES = [
+  {
+    title: "Liquor",
+    items: "Breweries & Craft Beer Dealers, Wine Shops, Liquor Stores, Alcohol + Tobacco Combo Stores, Distilleries, Tasting Rooms"
+  },
+  {
+    title: "Tobacco",
+    items: "Cigar Lounges, Tobacco Outlets, CBD, Vape Shops, Hookah Lounges, Smoke Shops"
+  },
+  {
+    title: "Clothing",
+    items: "Department Stores, Boutique Apparel, Custom Fashion, Shoe Stores, Accessories, Sportswear, Kids & Baby"
+  },
+  {
+    title: "Convenience & Fuel",
+    items: "Convenience Stores, Digital Food Menus, Fast Food Chains, Cafes, Bistros, Bakeries, Truck Stops, Delis"
+  },
+  {
+    title: "Nightclub & Bar",
+    items: "Events, Music Festivals, Lounges, Sports Bars, Pubs, Dance Clubs, Comedy Clubs"
+  },
+  {
+    title: "Pet",
+    items: "Pet Supply Stores, Pet eCommerce, Pet Feed Stores, Grooming Salons, Veterinary Clinics, Aquariums"
+  },
+  {
+    title: "Salon & Spa",
+    items: "Spas, Salons, Barbershops, Health & Beauty, Nail Salons, Massage Therapy, Tanning Salons"
+  },
+  {
+    title: "Grocery",
+    items: "Supermarkets, Farmers' Markets, Organic Food Stores, Specialty Grocers, Butchers, Seafood Markets"
+  }
+]
+
 export const RetailStoreDemo = () => {
   return (
     <section className="bg-[#F9F9F9]">
@@ -94,13 +136,34 @@ export const RetailStoreDemo = () => {
             })}
           </ContainerAnimated>
           <ContainerAnimated className="flex flex-col gap-4 sm:flex-row">
-            <MovingBorderButton
-              borderRadius="1.75rem"
-              containerClassName="h-10"
-              className="bg-white dark:bg-slate-900 text-black dark:text-white border-neutral-200 dark:border-slate-800"
-            >
-              Learn More
-            </MovingBorderButton>
+            <Dialog>
+              <DialogTrigger asChild>
+                <div className="inline-block cursor-pointer">
+                  <MovingBorderButton
+                    borderRadius="1.75rem"
+                    containerClassName="h-10"
+                    className="bg-white dark:bg-slate-900 text-black dark:text-white border-neutral-200 dark:border-slate-800"
+                  >
+                    Learn More
+                  </MovingBorderButton>
+                </div>
+              </DialogTrigger>
+              <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto bg-white dark:bg-slate-950">
+                <DialogHeader>
+                  <DialogTitle className="text-3xl font-bold text-center mb-8 text-slate-900 dark:text-white">Industries We Serve</DialogTitle>
+                </DialogHeader>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-8 p-6">
+                  {MODAL_CATEGORIES.map((cat, idx) => (
+                    <div key={idx} className="space-y-1">
+                      <h3 className="text-xl font-bold text-[#D87027]">{cat.title}</h3>
+                      <p className="text-slate-600 dark:text-slate-300 italic leading-relaxed text-sm font-medium">
+                        {cat.items}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </DialogContent>
+            </Dialog>
           </ContainerAnimated>
         </ContainerStagger>
 

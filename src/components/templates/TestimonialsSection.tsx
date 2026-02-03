@@ -2,6 +2,7 @@ import { SectionData } from '@/types/builder';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Quote, Star, Play } from 'lucide-react';
+import { getImageUrl } from '@/lib/api';
 
 interface TestimonialsSectionProps {
   data: SectionData['data'];
@@ -52,7 +53,7 @@ export function TestimonialsSection({ data, variant = 'grid', isPreview }: Testi
                 <CardContent className="p-8">
                   <div className="flex items-start gap-6">
                     <Avatar className="w-16 h-16">
-                      <AvatarImage src={item.image?.src} alt={item.name} />
+                      <AvatarImage src={getImageUrl(item.image?.src)} alt={item.name} />
                       <AvatarFallback>{item.name?.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <div className="flex-1 space-y-4">
@@ -110,7 +111,7 @@ export function TestimonialsSection({ data, variant = 'grid', isPreview }: Testi
                   <p className="text-lg leading-relaxed italic" style={{color: textColor}}>"{item.quote}"</p>
                   <div className="flex items-center gap-4 pt-4 border-t">
                     <Avatar className="w-12 h-12">
-                      <AvatarImage src={item.image?.src} alt={item.name} />
+                      <AvatarImage src={getImageUrl(item.image?.src)} alt={item.name} />
                       <AvatarFallback>{item.name?.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <div>
@@ -162,7 +163,7 @@ export function TestimonialsSection({ data, variant = 'grid', isPreview }: Testi
                 </p>
                 <div className="flex items-center justify-center gap-4">
                   <Avatar className="w-16 h-16">
-                    <AvatarImage src={item.image?.src} alt={item.name} />
+                    <AvatarImage src={getImageUrl(item.image?.src)} alt={item.name} />
                     <AvatarFallback>{item.name?.charAt(0)}</AvatarFallback>
                   </Avatar>
                   <div>
@@ -225,7 +226,7 @@ export function TestimonialsSection({ data, variant = 'grid', isPreview }: Testi
                   <p className="text-lg leading-relaxed italic text-center" style={{color: textColor}}>"{item.quote}"</p>
                   <div className="flex items-center justify-center gap-4 pt-4 border-t">
                     <Avatar className="w-12 h-12">
-                      <AvatarImage src={item.image?.src} alt={item.name} />
+                      <AvatarImage src={getImageUrl(item.image?.src)} alt={item.name} />
                       <AvatarFallback>{item.name?.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <div className="text-center">
@@ -279,7 +280,7 @@ export function TestimonialsSection({ data, variant = 'grid', isPreview }: Testi
               >
                 <div className="aspect-video relative overflow-hidden bg-gradient-to-br from-muted to-muted/50">
                   <img
-                    src={item.thumbnail?.src || item.image?.src}
+                    src={getImageUrl(item.thumbnail?.src || item.image?.src)}
                     alt={item.name}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
@@ -294,7 +295,7 @@ export function TestimonialsSection({ data, variant = 'grid', isPreview }: Testi
                   <p className="text-lg leading-relaxed italic" style={{color: textColor}}>"{item.quote}"</p>
                   <div className="flex items-center gap-4">
                     <Avatar className="w-12 h-12">
-                      <AvatarImage src={item.image?.src} alt={item.name} />
+                      <AvatarImage src={getImageUrl(item.image?.src)} alt={item.name} />
                       <AvatarFallback>{item.name?.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <div>
@@ -350,7 +351,7 @@ export function TestimonialsSection({ data, variant = 'grid', isPreview }: Testi
                 <p className="text-lg leading-relaxed italic" style={{color: textColor}}>"{item.quote}"</p>
                 <div className="flex items-center justify-center gap-4">
                   <Avatar className="w-12 h-12">
-                    <AvatarImage src={item.image?.src} alt={item.name} />
+                    <AvatarImage src={getImageUrl(item.image?.src)} alt={item.name} />
                     <AvatarFallback>{item.name?.charAt(0)}</AvatarFallback>
                   </Avatar>
                   <div className="text-left">

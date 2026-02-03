@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { ChevronUp, Accessibility, Mail, Phone, User, Send, ArrowRight } from 'lucide-react';
+import { ChevronUp, Mail, Phone, User, Send, ArrowRight, X } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import {
   Dialog,
   DialogContent,
@@ -14,65 +15,276 @@ import { Textarea } from "@/components/ui/textarea";
 // Interface for Product Data
 interface Product {
   id: number;
-  image: string;
+  images: string[];
   title: string;
   description: string;
   isTitleBlue?: boolean;
+  keyFeatures?: string[];
+  inTheBox?: string[];
+  price?: string;
 }
 
 const FeaturedProductSection: React.FC = () => {
+  const navigate = useNavigate();
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
+
+  const handleQuantityChange = (id: number, qty: number) => {
+    setQuantities(prev => ({ ...prev, [id]: qty }));
+  };
 
   // Data derived from the screenshot
   const products: Product[] = [
     {
+      id: 5,
+      images: ["/product3.png"],
+      title: 'SellSync Cash Drawer',
+      description: "Compact footprint, dual media slots, and durable construction for your point-of-sale.",
+      isTitleBlue: false,
+      price: "Contact for Quote",
+      keyFeatures: [
+        "Secure cash storage",
+        "Dual media slots",
+        "Programmable open/close",
+        "Durable steel construction",
+        "Compact design",
+        "Multiple compartments for organization"
+      ],
+      inTheBox: [
+        "Cash drawer unit",
+        "Lock and key",
+        "Power cable",
+        "RJ-11 connector",
+        "Installation hardware",
+        "Quick setup guide"
+      ]
+    },
+    {
+      id: 8,
+      images: ["/product1.png", "/product2.png"],
+      title: 'SellSync ZD411 Advanced Desktop 2-inch Wide',
+      description: "High-speed desktop thermal transfer printer for labels and receipts, offering exceptional print quality and reliability for busy retail settings.",
+      isTitleBlue: false,
+      price: "Contact for Quote",
+      keyFeatures: [
+        "Desktop thermal transfer printer",
+        "2-inch wide printing capability",
+        "Fast print speed (up to 250mm/sec)",
+        "High-resolution printing",
+        "Durable industrial construction",
+        "Network connectivity support"
+      ],
+      inTheBox: [
+        "Printer unit",
+        "Power supply and cord",
+        "USB cable",
+        "Quick start guide",
+        "Empty ribbon take-up core (thermal transfer only)",
+        "Mounting bracket"
+      ]
+    },
+    {
       id: 1,
-      image: "https://goftx.com/wp-content/uploads/2025/08/HP-Engage-One-Pro-15.6-Display-1-1.png",
-      title: 'HP Engage One Pro 15.6” (G2) Display',
+      images: ["/sellsync1pr.png", "/sellsync2pr.png", "/sellsync3pr.png", "/sellsync4pr.png", "/sellsync5pr.png"],
+      title: 'SellSync Pro 15.6" Touchscreen Display',
       description: "A smooth and powerful display to elevate your customer experience.",
       isTitleBlue: false,
+      price: "Contact for Quote",
+      keyFeatures: [
+        "15.6-inch high-definition display",
+        "Multi-touch capability",
+        "Fast response time",
+        "Wide viewing angles",
+        "Sleek modern design",
+        "Integration with all POS systems"
+      ],
+      inTheBox: [
+        "Touchscreen display",
+        "Power cord",
+        "USB cable",
+        "HDMI cable",
+        "Stand",
+        "Quick setup guide"
+      ]
     },
     {
       id: 2,
-      image: "https://goftx.com/wp-content/uploads/2025/08/HP-Engage-14-Customer-Facing-Display-transparent.png",
-      title: 'HP Engage 14” Customer Facing Display w/ Stand',
+      images: ["/product6.png"],
+      title: 'SellSync 14" Customer Facing Display w/ Stand',
       description: "Inform and engage your customers with this clear and concise display.",
-      isTitleBlue: false, // Changed to false as requested
+      isTitleBlue: false,
+      price: "Contact for Quote",
+      keyFeatures: [
+        "14-inch customer-facing display",
+        "High clarity screen",
+        "Included metal stand",
+        "Anti-glare coating",
+        "Fast refresh rate",
+        "Energy efficient operation"
+      ],
+      inTheBox: [
+        "14-inch display",
+        "Sturdy metal stand",
+        "Power supply",
+        "HDMI cable",
+        "VGA cable",
+        "Installation guide"
+      ]
     },
     {
       id: 3,
-      image: "https://goftx.com/wp-content/uploads/2024/03/HP-Thermal-Receipt-Printer-1.png",
-      title: 'HP Thermal Receipt Printer and Cable',
+      images: ["/product5.png"],
+      title: 'SellSync Thermal Receipt Printer and Cable',
       description: "A reliable device that delivers clear, fast, and professional receipts for your business.",
       isTitleBlue: false,
+      price: "Contact for Quote",
+      keyFeatures: [
+        "High-speed thermal printing",
+        "Clear, professional receipts",
+        "Automatic paper cutting",
+        "Quiet operation",
+        "Wide paper roll compatibility",
+        "Reliable long-term performance"
+      ],
+      inTheBox: [
+        "Thermal receipt printer",
+        "USB cable",
+        "Power adapter",
+        "Receipt paper roll",
+        "Quick start guide",
+        "Installation bracket"
+      ]
     },
     {
       id: 4,
-      image: "https://goftx.com/wp-content/uploads/2024/03/HP-Engage-Imaging-Barcode-1-2.png",
-      title: 'HP Engage Imaging Barcode Scanner',
+      images: ["https://goftx.com/wp-content/uploads/2024/03/HP-Engage-Imaging-Barcode-1-2.png"],
+      title: 'SellSync Imaging Barcode Scanner',
       description: "Accelerate your checkout process with this high-speed and accurate barcode scanner.",
       isTitleBlue: false,
+      price: "Contact for Quote",
+      keyFeatures: [
+        "High-speed barcode scanning",
+        "Accurate reading capability",
+        "Wireless connectivity",
+        "Multiple barcode format support",
+        "Durable design",
+        "Extended range scanning"
+      ],
+      inTheBox: [
+        "Barcode scanner",
+        "Charging dock",
+        "USB cable",
+        "Power adapter",
+        "User manual",
+        "Quick reference guide"
+      ]
     },
     {
-      id: 5,
-      image: "https://goftx.com/wp-content/uploads/2024/03/HP-Cash-Drawer-1-2.png",
-      title: 'HP Cash Drawer',
-      description: "Compact footprint, dual media slots, and durable construction for your point-of-sale.",
+      id: 7,
+      images: ["https://www.zebra.com/content/dam/zebra_dam/global/zcom-web-production/web-production-photography/web001/tc7x-series-mobile-computers-front-facing-TC78-3x2-3600.jpg", "https://www.zebra.com/content/dam/zebra_dam/global/zcom-web-production/web-production-photography/web001/tc78-photography-website-front-right-facing-3x2-3600.jpg"],
+      title: 'SellSync TC78 Mobile Computer',
+      description: "Rugged handheld mobile computer with advanced scanning capabilities, perfect for inventory management and on-the-go operations in retail environments.",
       isTitleBlue: false,
+      price: "Contact for Quote",
+      keyFeatures: [
+        "Rugged Android-based mobile computer",
+        "Advanced 2D barcode scanning capabilities",
+        "Real-time inventory management",
+        "On-the-go operations support",
+        "Enterprise-grade durability",
+        "Long battery life (up to 12 hours)"
+      ],
+      inTheBox: [
+        "Mobile computer unit",
+        "Battery",
+        "Charger",
+        "USB cable",
+        "Quick start guide",
+        "Screen protector"
+      ]
     },
     {
       id: 6,
-      image: "https://goftx.com/wp-content/uploads/2024/03/SMARTtill-Unit-1-1.png",
-      title: 'smarttill Unit',
+      images: ["/product7.png"],
+      title: 'SellSync SmartTill Unit',
       description: "Make cash handling operations proactive with our intelligent cash drawer.",
-      isTitleBlue: false, // Changed to false as requested
+      isTitleBlue: false,
+      price: "Contact for Quote",
+      keyFeatures: [
+        "Intelligent cash management",
+        "Real-time cash tracking",
+        "Automated reconciliation",
+        "Secure storage solution",
+        "Integration with POS system",
+        "Advanced reporting capabilities"
+      ],
+      inTheBox: [
+        "smarttill unit",
+        "Installation kit",
+        "Cables and connectors",
+        "Power supply",
+        "User documentation",
+        "Setup assistance guide"
+      ]
+    },
+    {
+      id: 9,
+      images: ["https://goftx.com/wp-content/uploads/2025/02/Handhandal-device-2-1.png"],
+      title: 'SellSync Handheld Android Device (EA660)',
+      description: "Powered by the advanced Android 13 operating system, the EA660 delivers fast, real-time data collection and ensures a smooth, uninterrupted workflow.",
+      isTitleBlue: false,
+      price: "Contact for Quote",
+      keyFeatures: [
+        "Android 13 operating system",
+        "Real-time data collection",
+        "Fast and reliable performance",
+        "Durable design for mobile use",
+        "Integrated barcode scanning",
+        "Long battery life"
+      ],
+      inTheBox: [
+        "EA660 handheld device",
+        "Battery",
+        "Charger",
+        "USB cable",
+        "Quick start guide",
+        "Protective case"
+      ]
+    },
+    {
+      id: 10,
+      images: ["/product121.png", "/product122.png", "/product123.png"],
+      title: 'SellSync Smart Receipt Printer',
+      description: "Next-generation smart thermal printer with cloud connectivity, allowing for remote printing and order management directly from the device.",
+      isTitleBlue: false,
+      price: "Contact for Quote",
+      keyFeatures: [
+        "Cloud-connected printing",
+        "Remote management capability",
+        "Fast thermal printing (260mm/s)",
+        "Multiple interface options (Wi-Fi, LAN, USB)",
+        "Compact and stylish design",
+        "Paper saving technology"
+      ],
+      inTheBox: [
+        "Smart printer unit",
+        "Power adapter",
+        "USB cable",
+        "Sample paper roll",
+        "Safety guide",
+        "Quick start guide"
+      ]
     }
   ];
 
   const handleContactClick = (product: Product) => {
     setSelectedProduct(product);
     setIsModalOpen(true);
+  };
+
+  const handleViewDetails = (product: Product) => {
+    navigate(`/product/${product.id}`, { state: { product } });
   };
 
   return (
@@ -95,6 +307,9 @@ const FeaturedProductSection: React.FC = () => {
             <ProductCard
               key={product.id}
               product={product}
+              quantity={quantities[product.id] || 1}
+              onQuantityChange={(qty) => handleQuantityChange(product.id, qty)}
+              onViewDetails={() => handleViewDetails(product)}
               onContactClick={() => handleContactClick(product)}
             />
           ))}
@@ -103,19 +318,23 @@ const FeaturedProductSection: React.FC = () => {
 
       {/* Product Inquiry Modal */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="sm:max-w-[600px] p-0 overflow-hidden bg-white rounded-2xl border border-gray-100 shadow-2xl">
+        <DialogContent className="sm:max-w-[600px] p-0 overflow-hidden bg-white rounded-2xl border-2 border-[#D87027] shadow-2xl">
           <div className="grid grid-cols-1 md:grid-cols-5 h-full">
             {/* Sidebar (Visual) */}
-            <div className="md:col-span-2 bg-gradient-to-br from-[#4175FC] to-[#005a87] p-6 text-white flex flex-col justify-between hidden md:flex">
+            <div className="md:col-span-2 bg-gradient-to-br from-[#F08A4B] to-[#C45E18] p-6 text-white flex flex-col justify-between hidden md:flex">
               <div>
                 <h4 className="text-xl font-bold mb-2">Get in Touch</h4>
-                <p className="text-blue-100 text-sm mb-6">We'd love to help you find the perfect hardware for your business.</p>
+                <p className="text-orange-100 text-sm mb-6">We'd love to help you find the perfect hardware for your business.</p>
                 {selectedProduct && (
                   <div className="bg-white/10 p-4 rounded-xl backdrop-blur-sm border border-white/10 mb-4">
-                    <img src={selectedProduct.image} alt="Product" className="w-16 h-16 object-contain mb-2 bg-white rounded-lg p-1" />
+                    <img src={selectedProduct.images[0]} alt="Product" className="w-16 h-16 object-contain mb-2 bg-white rounded-lg p-1" />
                     <p className="font-semibold text-xs opacity-90 line-clamp-2">{selectedProduct.title}</p>
+                    <p className="text-xs mt-1">Quantity: <span className="font-bold">{quantities[selectedProduct.id] || 1}</span></p>
                   </div>
                 )}
+                <div className="bg-white/5 p-3 rounded-lg border border-white/5 mb-6">
+                  <p className="text-xs opacity-80">Total Unique Products in Catalog: <span className="font-bold text-white">{products.length}</span></p>
+                </div>
               </div>
               <div className="space-y-4 text-sm">
                 <div className="flex items-center gap-3 opacity-90">
@@ -132,7 +351,7 @@ const FeaturedProductSection: React.FC = () => {
               <DialogHeader className="mb-6">
                 <DialogTitle className="text-2xl font-bold text-gray-900">Request Details</DialogTitle>
                 <DialogDescription className="text-gray-500">
-                  Fill out the form below to inquire about <span className="font-semibold text-blue-600">{selectedProduct?.title}</span>.
+                  Fill out the form below to inquire about <span className="font-semibold text-[#D87027]">{quantities[selectedProduct?.id || 0] || 1}x {selectedProduct?.title}</span>.
                 </DialogDescription>
               </DialogHeader>
 
@@ -162,7 +381,7 @@ const FeaturedProductSection: React.FC = () => {
                   />
                 </div>
 
-                <Button type="submit" className="w-full bg-[#4175FC] hover:bg-blue-600 text-white font-bold py-6 rounded-xl shadow-lg shadow-blue-200 transition-all active:scale-[0.98]">
+                <Button type="submit" className="w-full bg-[#D87027] hover:bg-[#c26522] text-white font-bold py-6 rounded-xl shadow-lg shadow-orange-200 transition-all active:scale-[0.98]">
                   Send Inquiry <Send className="ml-2 h-4 w-4" />
                 </Button>
               </form>
@@ -172,31 +391,32 @@ const FeaturedProductSection: React.FC = () => {
       </Dialog>
 
       {/* Floating Action Button (Bottom Right) */}
-      <button className="fixed bottom-8 right-8 bg-[#007bff] hover:bg-blue-600 text-white p-3 rounded shadow-lg transition-colors z-50">
+      <button className="fixed bottom-8 right-8 bg-[#D87027] hover:bg-[#c26522] text-white p-3 rounded shadow-lg transition-colors z-50">
         <ChevronUp size={20} strokeWidth={3} />
       </button>
 
-      {/* Accessibility Icon (Bottom Left) */}
-      <div className="fixed bottom-8 left-8 bg-[#005a87] text-white p-2 rounded-full cursor-pointer shadow-lg hover:bg-blue-800 transition-colors z-50">
-        <Accessibility size={24} />
-      </div>
+
 
     </div>
   );
 };
 
 // Individual Card Component
-const ProductCard: React.FC<{ product: Product, onContactClick: () => void }> = ({ product, onContactClick }) => {
-  const [quantity, setQuantity] = useState<number>(1);
-
+const ProductCard: React.FC<{
+  product: Product,
+  quantity: number,
+  onQuantityChange: (qty: number) => void,
+  onViewDetails: () => void,
+  onContactClick: () => void
+}> = ({ product, quantity, onQuantityChange, onViewDetails, onContactClick }) => {
   return (
     <div className="col-xs-12 col-sm-6 col-lg-4 col-xl-4 h-full w-full">
-      <div className="hard-box bg-white rounded-xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] p-12 flex flex-col items-center text-center h-full min-h-[550px] border border-gray-200 hover:border-gray-300 transition-all duration-300" id={`product-${product.id}`}>
+      <div className="hard-box bg-white rounded-xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] p-12 flex flex-col items-center text-center h-full min-h-[500px] border border-gray-200 hover:border-gray-300 transition-all duration-300" id={`product-${product.id}`}>
 
         {/* Image Area */}
         <div className="hard-img h-72 w-full flex items-center justify-center mb-8">
           <img
-            src={product.image}
+            src={product.images[0]}
             alt={product.title}
             className="max-h-full max-w-full object-contain transform hover:scale-105 transition-transform duration-300"
           />
@@ -212,24 +432,24 @@ const ProductCard: React.FC<{ product: Product, onContactClick: () => void }> = 
           {product.description}
         </p>
 
-        {/* Action Area (Quantity + Contact Button) */}
-        <div className="w-full mt-auto flex items-center justify-center gap-3">
+        {/* Action Area (Quantity + View Details Button) */}
+        <div className="w-full mt-auto flex items-center justify-center gap-6">
           {/* Quantity Input */}
           <div className="relative">
             <input
               type="number"
               min="1"
               value={quantity}
-              onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
-              className="w-14 h-11 border border-gray-200 rounded pl-3 pr-1 text-gray-600 text-sm focus:outline-none focus:border-blue-400"
+              onChange={(e) => onQuantityChange(parseInt(e.target.value) || 1)}
+              className="w-14 h-11 border border-gray-200 rounded pl-3 pr-1 text-gray-600 text-sm focus:outline-none focus:border-[#D87027]"
             />
           </div>
 
           <button
-            onClick={onContactClick}
-            className="bg-[#D87027] hover:bg-[#c26522] text-white font-bold py-3 px-6 rounded-full text-base transition-colors shadow-lg shadow-[#D87027]/40 flex items-center justify-center gap-2"
+            onClick={onViewDetails}
+            className="bg-[#D87027] hover:bg-[#c26522] text-white font-bold py-3 px-6 rounded-full text-base transition-colors shadow-lg shadow-[#D87027]/40 flex items-center justify-center gap-2 whitespace-nowrap"
           >
-            Contact Us <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+            View Details <ArrowRight size={18} />
           </button>
         </div>
       </div>

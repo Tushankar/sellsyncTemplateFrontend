@@ -1,6 +1,7 @@
 import { SectionData } from '@/types/builder';
 import { Expand, ZoomIn, Eye, ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { useState } from 'react';
+import { getImageUrl } from '@/lib/api';
 
 interface GallerySectionProps {
   data: SectionData['data'];
@@ -79,7 +80,7 @@ export function GallerySection({ data, variant = 'grid', isPreview }: GallerySec
                 {item.image && (
                   <div className="relative">
                     <img
-                      src={item.image.src}
+                      src={getImageUrl(item.image.src)}
                       alt={item.image.alt}
                       className="w-full object-cover group-hover:scale-110 transition-transform duration-700"
                     />
@@ -146,7 +147,7 @@ export function GallerySection({ data, variant = 'grid', isPreview }: GallerySec
                   {item.image && (
                     <div className="relative aspect-video">
                       <img
-                        src={item.image.src}
+                        src={getImageUrl(item.image.src)}
                         alt={item.image.alt}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                       />
@@ -247,7 +248,7 @@ export function GallerySection({ data, variant = 'grid', isPreview }: GallerySec
                 {item.image && (
                   <div className="aspect-square overflow-hidden rounded-2xl shadow-lg group-hover:shadow-2xl transition-shadow duration-500">
                     <img
-                      src={item.image.src}
+                      src={getImageUrl(item.image.src)}
                       alt={item.image.alt}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                     />
@@ -318,7 +319,7 @@ export function GallerySection({ data, variant = 'grid', isPreview }: GallerySec
                 {item.image && (
                   <div className="relative aspect-video">
                     <img
-                      src={item.image.src}
+                      src={getImageUrl(item.image.src)}
                       alt={item.image.alt}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     />
@@ -383,7 +384,7 @@ export function GallerySection({ data, variant = 'grid', isPreview }: GallerySec
                   {item.image && (
                     <div className="aspect-[16/9] relative">
                       <img
-                        src={item.image.src}
+                        src={getImageUrl(item.image.src)}
                         alt={item.image.alt}
                         className="w-full h-full object-cover"
                       />
@@ -473,7 +474,7 @@ export function GallerySection({ data, variant = 'grid', isPreview }: GallerySec
               {item.image && (
                 <div className="relative h-full aspect-square">
                   <img
-                    src={item.image.src}
+                    src={getImageUrl(item.image.src)}
                     alt={item.image.alt}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
@@ -529,7 +530,7 @@ export function GallerySection({ data, variant = 'grid', isPreview }: GallerySec
               {item.image && (
                 <div className="relative h-full aspect-square">
                   <img
-                    src={item.image.src}
+                    src={getImageUrl(item.image.src)}
                     alt={item.image.alt}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />

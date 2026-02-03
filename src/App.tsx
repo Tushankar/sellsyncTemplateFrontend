@@ -7,11 +7,18 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { BuilderProvider } from "@/contexts/BuilderContext";
 import Loader from "@/components/ui/loader";
 
+import RouteGuard from "@/components/ui/route-guard";
+
+import ScrollToAnchor from "@/components/ScrollToAnchor";
+
 const Admin = lazy(() => import("./pages/Admin"));
 const Index = lazy(() => import("./pages/Index"));
 const UserDashboard = lazy(() => import("./pages/UserDashboard"));
 const FAQ = lazy(() => import("./pages/FAQ"));
 const NotFound = lazy(() => import("./pages/NotFound"));
+const DemoPage = lazy(() => import("./pages/DemoPage"));
+const HardwarePage = lazy(() => import("./pages/HardwarePage"));
+const ProductDetailPage = lazy(() => import("./pages/ProductDetailPage"));
 
 const queryClient = new QueryClient();
 
@@ -22,9 +29,15 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <ScrollToAnchor />
           <Suspense fallback={<Loader />}>
             <Routes>
-              <Route path="/builder" element={<Admin />} />
+              <Route path="/builder" element={<RouteGuard />}>
+                <Route index element={<Admin />} />
+              </Route>
+              <Route path="/demo" element={<DemoPage />} />
+              <Route path="/hardware" element={<HardwarePage />} />
+              <Route path="/product/:id" element={<ProductDetailPage />} />
               <Route path="/" element={<Index />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/dashboard" element={<UserDashboard />} />

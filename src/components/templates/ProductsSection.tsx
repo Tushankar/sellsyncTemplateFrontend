@@ -2,6 +2,7 @@ import { SectionData } from '@/types/builder';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart, Star, Tag, ArrowRight, Heart } from 'lucide-react';
+import { getImageUrl } from '@/lib/api';
 
 interface ProductsSectionProps {
   data: SectionData['data'];
@@ -77,7 +78,7 @@ export function ProductsSection({ data, variant = 'grid', isPreview }: ProductsS
               >
                 <div className="aspect-square overflow-hidden relative">
                   <img
-                    src={item.image?.src}
+                    src={getImageUrl(item.image?.src)}
                     alt={item.image?.alt}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
@@ -150,7 +151,7 @@ export function ProductsSection({ data, variant = 'grid', isPreview }: ProductsS
                 >
                   <div className="aspect-square overflow-hidden relative">
                     <img
-                      src={item.image?.src}
+                      src={getImageUrl(item.image?.src)}
                       alt={item.image?.alt}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />
@@ -214,7 +215,7 @@ export function ProductsSection({ data, variant = 'grid', isPreview }: ProductsS
               >
                 <div className="aspect-square overflow-hidden rounded-lg">
                   <img
-                    src={item.image?.src}
+                    src={getImageUrl(item.image?.src)}
                     alt={item.image?.alt}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
@@ -379,7 +380,7 @@ export function ProductsSection({ data, variant = 'grid', isPreview }: ProductsS
               >
                 <div className="aspect-square overflow-hidden relative bg-gradient-to-br from-muted to-muted/50">
                   <img
-                    src={item.image?.src}
+                    src={getImageUrl(item.image?.src)}
                     alt={item.image?.alt}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
@@ -460,7 +461,7 @@ export function ProductsSection({ data, variant = 'grid', isPreview }: ProductsS
               <div className="relative order-1 lg:order-2">
                 <div className="rounded-2xl overflow-hidden shadow-2xl">
                   <img
-                    src={featuredProduct.image?.src}
+                    src={getImageUrl(featuredProduct.image?.src)}
                     alt={featuredProduct.image?.alt}
                     className="w-full h-full object-cover"
                   />
@@ -485,7 +486,7 @@ export function ProductsSection({ data, variant = 'grid', isPreview }: ProductsS
                   >
                     <div className="aspect-square overflow-hidden relative bg-gradient-to-br from-muted to-muted/50">
                       <img
-                        src={item.image?.src}
+                        src={getImageUrl(item.image?.src)}
                         alt={item.image?.alt}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       />
@@ -543,7 +544,7 @@ export function ProductsSection({ data, variant = 'grid', isPreview }: ProductsS
               )}
               <div className="aspect-square rounded-3xl overflow-hidden bg-gradient-to-br from-muted to-muted/50 shadow-2xl">
                 <img
-                  src={product.image?.src}
+                  src={getImageUrl(product.image?.src)}
                   alt={product.image?.alt}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
@@ -649,7 +650,7 @@ export function ProductsSection({ data, variant = 'grid', isPreview }: ProductsS
               >
                 <div className="aspect-square overflow-hidden relative bg-gradient-to-br from-muted to-muted/50">
                   <img
-                    src={item.image?.src}
+                    src={getImageUrl(item.image?.src)}
                     alt={item.image?.alt}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
@@ -720,7 +721,7 @@ export function ProductsSection({ data, variant = 'grid', isPreview }: ProductsS
             >
               <div className="aspect-square overflow-hidden relative bg-gradient-to-br from-muted to-muted/50">
                 <img
-                  src={item.image?.src}
+                  src={getImageUrl(item.image?.src)}
                   alt={item.image?.alt}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />

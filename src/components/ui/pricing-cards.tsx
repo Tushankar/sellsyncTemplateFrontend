@@ -27,7 +27,7 @@ function Pricing() {
     {
       title: "Starter",
       description: "1 Store, Basic Features",
-      price: "$29",
+      price: "$75",
       period: "/ month",
       features: [
         {
@@ -51,7 +51,7 @@ function Pricing() {
     {
       title: "Professional",
       description: "Growing Stores, Full Features",
-      price: "$79",
+      price: "$149",
       period: "/ month",
       features: [
         {
