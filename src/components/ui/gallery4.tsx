@@ -179,10 +179,7 @@ const Gallery4 = ({
                     <div className="mb-6 sm:mb-8 md:mb-12 lg:mb-9 line-clamp-2 text-xs sm:text-sm">
                       {item.description}
                     </div>
-                    <div className="flex items-center text-xs sm:text-sm">
-                      Read more{" "}
-                      <ArrowRight className="ml-2 size-4 sm:size-5 transition-transform group-hover:translate-x-1" />
-                    </div>
+
                   </div>
                 </div>
               </a>

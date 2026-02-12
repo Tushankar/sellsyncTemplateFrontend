@@ -63,7 +63,7 @@ const FeaturedProductSection: React.FC = () => {
     {
       id: 8,
       images: ["/product1.png", "/product2.png"],
-      title: 'SellSync ZD411 Advanced Desktop 2-inch Wide',
+      title: 'SellSync Zebra ZD411 Advanced Desktop 2-inch Wide',
       description: "High-speed desktop thermal transfer printer for labels and receipts, offering exceptional print quality and reliability for busy retail settings.",
       isTitleBlue: false,
       price: "Contact for Quote",
@@ -86,7 +86,7 @@ const FeaturedProductSection: React.FC = () => {
     },
     {
       id: 1,
-      images: ["/sellsync1pr.png", "/sellsync2pr.png", "/sellsync3pr.png", "/sellsync4pr.png", "/sellsync5pr.png"],
+      images: ["/sellsync3pr.png", "/sellsync4pr.png", "/sellsync1pr.png", "/sellsync2pr.png", "/sellsync5pr.png"],
       title: 'SellSync Pro 15.6" Touchscreen Display',
       description: "A smooth and powerful display to elevate your customer experience.",
       isTitleBlue: false,
@@ -108,30 +108,7 @@ const FeaturedProductSection: React.FC = () => {
         "Quick setup guide"
       ]
     },
-    {
-      id: 2,
-      images: ["/product6.png"],
-      title: 'SellSync 14" Customer Facing Display w/ Stand',
-      description: "Inform and engage your customers with this clear and concise display.",
-      isTitleBlue: false,
-      price: "Contact for Quote",
-      keyFeatures: [
-        "14-inch customer-facing display",
-        "High clarity screen",
-        "Included metal stand",
-        "Anti-glare coating",
-        "Fast refresh rate",
-        "Energy efficient operation"
-      ],
-      inTheBox: [
-        "14-inch display",
-        "Sturdy metal stand",
-        "Power supply",
-        "HDMI cable",
-        "VGA cable",
-        "Installation guide"
-      ]
-    },
+
     {
       id: 3,
       images: ["/product5.png"],
@@ -158,18 +135,18 @@ const FeaturedProductSection: React.FC = () => {
     },
     {
       id: 4,
-      images: ["https://goftx.com/wp-content/uploads/2024/03/HP-Engage-Imaging-Barcode-1-2.png"],
-      title: 'SellSync Imaging Barcode Scanner',
-      description: "Accelerate your checkout process with this high-speed and accurate barcode scanner.",
+      images: ["/barcode.png"],
+      title: 'SellSync Wireless 2D Barcode Scanner',
+      description: "Instant scanning capability, supporting QR codes, UPC, and EAN barcodes for quick and accurate item identification. Used for age verification also.",
       isTitleBlue: false,
       price: "Contact for Quote",
       keyFeatures: [
-        "High-speed barcode scanning",
-        "Accurate reading capability",
+        "Instant scanning capability",
+        "Supports QR, UPC, and EAN barcodes",
+        "Quick and accurate identification",
+        "Used for age verification",
         "Wireless connectivity",
-        "Multiple barcode format support",
-        "Durable design",
-        "Extended range scanning"
+        "Durable design"
       ],
       inTheBox: [
         "Barcode scanner",
@@ -204,78 +181,9 @@ const FeaturedProductSection: React.FC = () => {
         "Screen protector"
       ]
     },
-    {
-      id: 6,
-      images: ["/product7.png"],
-      title: 'SellSync SmartTill Unit',
-      description: "Make cash handling operations proactive with our intelligent cash drawer.",
-      isTitleBlue: false,
-      price: "Contact for Quote",
-      keyFeatures: [
-        "Intelligent cash management",
-        "Real-time cash tracking",
-        "Automated reconciliation",
-        "Secure storage solution",
-        "Integration with POS system",
-        "Advanced reporting capabilities"
-      ],
-      inTheBox: [
-        "smarttill unit",
-        "Installation kit",
-        "Cables and connectors",
-        "Power supply",
-        "User documentation",
-        "Setup assistance guide"
-      ]
-    },
-    {
-      id: 9,
-      images: ["https://goftx.com/wp-content/uploads/2025/02/Handhandal-device-2-1.png"],
-      title: 'SellSync Handheld Android Device (EA660)',
-      description: "Powered by the advanced Android 13 operating system, the EA660 delivers fast, real-time data collection and ensures a smooth, uninterrupted workflow.",
-      isTitleBlue: false,
-      price: "Contact for Quote",
-      keyFeatures: [
-        "Android 13 operating system",
-        "Real-time data collection",
-        "Fast and reliable performance",
-        "Durable design for mobile use",
-        "Integrated barcode scanning",
-        "Long battery life"
-      ],
-      inTheBox: [
-        "EA660 handheld device",
-        "Battery",
-        "Charger",
-        "USB cable",
-        "Quick start guide",
-        "Protective case"
-      ]
-    },
-    {
-      id: 10,
-      images: ["/product121.png", "/product122.png", "/product123.png"],
-      title: 'SellSync Smart Receipt Printer',
-      description: "Next-generation smart thermal printer with cloud connectivity, allowing for remote printing and order management directly from the device.",
-      isTitleBlue: false,
-      price: "Contact for Quote",
-      keyFeatures: [
-        "Cloud-connected printing",
-        "Remote management capability",
-        "Fast thermal printing (260mm/s)",
-        "Multiple interface options (Wi-Fi, LAN, USB)",
-        "Compact and stylish design",
-        "Paper saving technology"
-      ],
-      inTheBox: [
-        "Smart printer unit",
-        "Power adapter",
-        "USB cable",
-        "Sample paper roll",
-        "Safety guide",
-        "Quick start guide"
-      ]
-    }
+
+
+
   ];
 
   const handleContactClick = (product: Product) => {
@@ -391,7 +299,10 @@ const FeaturedProductSection: React.FC = () => {
       </Dialog>
 
       {/* Floating Action Button (Bottom Right) */}
-      <button className="fixed bottom-8 right-8 bg-[#D87027] hover:bg-[#c26522] text-white p-3 rounded shadow-lg transition-colors z-50">
+      <button
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        className="fixed bottom-8 right-8 bg-[#D87027] hover:bg-[#c26522] text-white p-3 rounded shadow-lg transition-colors z-50"
+      >
         <ChevronUp size={20} strokeWidth={3} />
       </button>
 
@@ -414,12 +325,24 @@ const ProductCard: React.FC<{
       <div className="hard-box bg-white rounded-xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] p-12 flex flex-col items-center text-center h-full min-h-[500px] border border-gray-200 hover:border-gray-300 transition-all duration-300" id={`product-${product.id}`}>
 
         {/* Image Area */}
-        <div className="hard-img h-72 w-full flex items-center justify-center mb-8">
-          <img
-            src={product.images[0]}
-            alt={product.title}
-            className="max-h-full max-w-full object-contain transform hover:scale-105 transition-transform duration-300"
-          />
+        <div className="hard-img h-72 w-full flex items-center justify-center mb-8 gap-1">
+          {(product.id === 8 || product.id === 1 || product.id === 7) ? (
+            product.images.slice(0, 2).map((img: string, i: number) => (
+              <img
+                key={i}
+                src={img}
+                alt={`${product.title} ${i + 1}`}
+                className="max-h-full max-w-[55%] object-contain transform hover:scale-110 transition-transform duration-300"
+              />
+            ))
+          ) : (
+
+            <img
+              src={product.images[0]}
+              alt={product.title}
+              className="max-h-full max-w-full object-contain transform hover:scale-105 transition-transform duration-300"
+            />
+          )}
         </div>
 
         {/* Title */}

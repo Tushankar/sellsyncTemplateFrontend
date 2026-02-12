@@ -52,7 +52,7 @@ export const LoginSidebar: React.FC<LoginSidebarProps> = ({ variant = "ghost", c
   const [view, setView] = useState<ViewState>("login");
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [loginType, setLoginType] = useState<"pos" | "builder">("builder");
+  const [loginType, setLoginType] = useState<"pos" | "builder">("pos");
   const navigate = useNavigate();
 
   // Form Data States
@@ -348,17 +348,17 @@ export const LoginSidebar: React.FC<LoginSidebarProps> = ({ variant = "ghost", c
                 <div className="flex bg-muted p-1 rounded-lg mb-2">
                   <button
                     type="button"
-                    onClick={() => setLoginType("builder")}
-                    className={`flex-1 text-sm font-medium py-2 rounded-md transition-all ${loginType === "builder" ? "bg-white shadow text-foreground" : "text-muted-foreground hover:text-foreground"}`}
-                  >
-                    Website Builder
-                  </button>
-                  <button
-                    type="button"
                     onClick={() => setLoginType("pos")}
                     className={`flex-1 text-sm font-medium py-2 rounded-md transition-all ${loginType === "pos" ? "bg-white shadow text-foreground" : "text-muted-foreground hover:text-foreground"}`}
                   >
                     POS System
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setLoginType("builder")}
+                    className={`flex-1 text-sm font-medium py-2 rounded-md transition-all ${loginType === "builder" ? "bg-white shadow text-foreground" : "text-muted-foreground hover:text-foreground"}`}
+                  >
+                    Website Builder
                   </button>
                 </div>
               )}

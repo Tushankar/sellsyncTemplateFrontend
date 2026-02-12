@@ -607,13 +607,7 @@ export function SellSyncPOS() {
               <p className="text-sm text-muted-foreground mb-4">Perfectly optimized for grocery stores, convenience stores, salons, boutiques, liquor stores, and more.</p>
               <p className="text-sm text-muted-foreground">Also supports third-party hardware (Select models).</p>
             </div>
-            <div className="flex justify-center pb-6 sm:pb-8 md:pb-10">
-              <Link to="/hardware">
-                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  <MovingBorderButton borderRadius="1.75rem" containerClassName="w-60 h-12" className="bg-white dark:bg-slate-900 text-black dark:text-white border-neutral-200 dark:border-slate-800 whitespace-nowrap">Learn More About Hardware</MovingBorderButton>
-                </motion.div>
-              </Link>
-            </div>
+
           </motion.div>
         </section>
 

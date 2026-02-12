@@ -51,7 +51,7 @@ const HardwarePage = () => {
                   <div className="flex justify-center mb-6">
                     <div className="bg-orange-50 rounded-full p-6 inline-block">
                       <img
-                        src="https://cdn-jgbln.nitrocdn.com/pGVUzxswVhZZvBNINwSqErPDBHkaqMDe/assets/images/optimized/rev-d687137/goftx.com/wp-content/uploads/2025/01/1.svg"
+                        src="/No-Surprise-Fees.svg"
                         alt="No Surprise Fees"
                         className="w-16 h-16"
                       />
@@ -74,7 +74,7 @@ const HardwarePage = () => {
                   <div className="flex justify-center mb-6">
                     <div className="bg-orange-50 rounded-full p-6 inline-block">
                       <img
-                        src="https://cdn-jgbln.nitrocdn.com/pGVUzxswVhZZvBNINwSqErPDBHkaqMDe/assets/images/optimized/rev-621b940/goftx.com/wp-content/uploads/2025/01/2.svg"
+                        src="/Warranty-Included-Updated.svg"
                         alt="Warranty Included"
                         className="w-16 h-16"
                       />
@@ -105,7 +105,7 @@ const HardwarePage = () => {
                 <div className="bg-white rounded-2xl shadow-md p-6 flex items-center justify-center h-32 hover:shadow-lg transition-shadow">
                   <div className="flex items-center justify-center w-full h-full">
                     <img
-                      src="https://cdn-jgbln.nitrocdn.com/pGVUzxswVhZZvBNINwSqErPDBHkaqMDe/assets/images/optimized/rev-621b940/goftx.com/wp-content/uploads/2025/03/HP_logo-1.svg"
+                      src="/assets/logos/hp-logo.png"
                       alt="HP"
                       className="max-h-16 w-auto"
                     />
@@ -116,7 +116,7 @@ const HardwarePage = () => {
                 <div className="bg-white rounded-2xl shadow-md p-6 flex items-center justify-center h-32 hover:shadow-lg transition-shadow">
                   <div className="flex items-center justify-center w-full h-full">
                     <img
-                      src="https://cdn-jgbln.nitrocdn.com/pGVUzxswVhZZvBNINwSqErPDBHkaqMDe/assets/images/optimized/rev-621b940/goftx.com/wp-content/uploads/2025/03/pax-logo-1.webp"
+                      src="/assets/logos/pax-logo.svg"
                       alt="PAX"
                       className="max-h-16 w-auto"
                     />
@@ -127,7 +127,7 @@ const HardwarePage = () => {
                 <div className="bg-white rounded-2xl shadow-md p-6 flex items-center justify-center h-32 hover:shadow-lg transition-shadow">
                   <div className="flex items-center justify-center w-full h-full">
                     <img
-                      src="https://cdn-jgbln.nitrocdn.com/pGVUzxswVhZZvBNINwSqErPDBHkaqMDe/assets/images/source/rev-621b940/goftx.com/wp-content/uploads/2025/03/BriteSign-1.svg"
+                      src="/assets/logos/brightsign-logo.svg"
                       alt="BrightSign"
                       className="max-h-16 w-auto"
                     />
@@ -138,7 +138,7 @@ const HardwarePage = () => {
                 <div className="bg-white rounded-2xl shadow-md p-6 flex items-center justify-center h-32 hover:shadow-lg transition-shadow">
                   <div className="flex items-center justify-center w-full h-full">
                     <img
-                      src="https://cdn-jgbln.nitrocdn.com/pGVUzxswVhZZvBNINwSqErPDBHkaqMDe/assets/images/source/rev-621b940/goftx.com/wp-content/uploads/2025/03/unitech-logo-1.svg"
+                      src="/assets/logos/unitech-logo.svg"
                       alt="Unitech"
                       className="max-h-16 w-auto"
                     />
@@ -258,18 +258,7 @@ const HardwarePage = () => {
                   </div>
                 </div>
 
-                {/* Feature 2 */}
-                <div className="bg-white rounded-2xl p-8 border-2 border-[#4175FC] flex items-start gap-8 shadow-sm hover:shadow-md transition-shadow">
-                  <div className="min-w-20 h-20 text-[#4175FC] flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" /><path d="M9 3v18" /><path d="m13 8 4 4-4 4" /></svg>
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-[#002B5C] mb-3 uppercase tracking-wide">2 Customer Facing Displays</h3>
-                    <p className="text-gray-800 font-semibold text-lg leading-loose">
-                      Display ads with real-time receipts and flexible tilt and height adjustment to enhance customer engagement.
-                    </p>
-                  </div>
-                </div>
+
 
                 {/* Feature 3 */}
                 <div className="bg-white rounded-2xl p-8 border-2 border-[#4175FC] flex items-start gap-8 shadow-sm hover:shadow-md transition-shadow">

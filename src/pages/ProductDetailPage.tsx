@@ -62,26 +62,8 @@ const ALL_PRODUCTS: Product[] = [
     inTheBox: ["Thermal Printer", "Starter Paper Roll", "Interface Cable", "Power Supply"],
     specs: { "Print Width": "80mm / 58mm", "Resolution": "203 DPI", "Weight": "1.2kg" }
   },
-  {
-    id: 9,
-    images: ["https://goftx.com/wp-content/uploads/2025/02/Handhandal-device-2-1.png"],
-    title: 'SellSync Handheld Android Device (EA660)',
-    description: "Powered by the advanced Android 13 operating system, the EA660 delivers fast, real-time data collection and ensures a smooth, uninterrupted workflow.",
-    price: "Contact for Quote",
-    keyFeatures: ["Android 13 OS", "Real-time data collection", "Fast performance", "Durable mobile design", "Integrated scanning", "Extended battery life"],
-    inTheBox: ["EA660 Device", "Battery Pack", "Charger", "USB Cable", "User Guide"],
-    specs: { "OS": "Android 13", "Battery": "Up to 12 hours", "Connectivity": "Wi-Fi, Bluetooth" }
-  },
-  {
-    id: 10,
-    images: ["/product121.png", "/product122.png", "/product123.png"],
-    title: 'SellSync Smart Receipt Printer',
-    description: "Next-generation smart thermal printer with cloud connectivity, allowing for remote printing and order management directly from the device.",
-    price: "Contact for Quote",
-    keyFeatures: ["Cloud-connected printing", "Remote management capability", "Fast thermal printing (260mm/s)", "Multiple interface options (Wi-Fi, LAN, USB)", "Compact and stylish design", "Paper saving technology"],
-    inTheBox: ["Smart printer unit", "Power adapter", "USB cable", "Sample paper roll", "Safety guide", "Quick start guide"],
-    specs: { "Method": "Direct Thermal", "Speed": "260mm/sec", "Interface": "Wi-Fi / LAN / USB" }
-  },
+
+
   // ... other products can be added here following the same structure
 ];
 
