@@ -203,7 +203,7 @@ export function SellSyncPOS() {
           </button>
         </div>
       </header>
-
+ 
       {/* Mobile Menu */}
       {isMenuOpen && (
         <motion.div
@@ -220,7 +220,7 @@ export function SellSyncPOS() {
                   alt="SellSync Logo"
                   className="h-12 w-auto"
                 />
-
+ 
               </a>
             </div>
             <button onClick={toggleMenu}>

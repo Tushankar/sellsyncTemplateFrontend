@@ -214,11 +214,13 @@ export function FeatureShowcase({
 
             {/* CTAs */}
             <div className="mt-8 flex flex-wrap gap-3">
-              <LoginSidebar
-                className="bg-gradient-to-r from-[#D87027] to-[#f08a4b] hover:from-[#c5621f] hover:to-[#db7b40] text-white border-none h-11 px-8 rounded-md text-base"
-                variant="ghost"
-                triggerText="Get started"
-              />
+              <Link to="/builder">
+                <Button
+                  className="bg-gradient-to-r from-[#D87027] to-[#f08a4b] hover:from-[#c5621f] hover:to-[#db7b40] text-white border-none h-11 px-8 rounded-md text-base font-bold"
+                >
+                  Get started
+                </Button>
+              </Link>
             </div>
           </div>
         </div>

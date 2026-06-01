@@ -223,7 +223,7 @@ const ProductDetailPage: React.FC = () => {
           </button>
         </div>
       </header>
-
+ 
       {/* Mobile Menu */}
       {isMenuOpen && (
         <motion.div

@@ -12,7 +12,7 @@ const getApiBaseUrl = (): string => {
 
   // In development, use localhost
   if (import.meta.env.DEV) {
-    return 'https://sellsynctemplatebackend.onrender.com';
+    return 'http://localhost:5000';
   }
 
   // In production, use the deployed API URL
